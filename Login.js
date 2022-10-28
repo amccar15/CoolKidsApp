@@ -1,17 +1,21 @@
 import { StyleSheet, TextInput, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, StatusBar } from 'react-native';
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const deviceWidth = Dimensions.get('window').width;
 
-const LoginButton = ({onPress, title}) => (
-    <TouchableOpacity onPress={onPress} style={styles.loginButton}>
-        <Text style={styles.loginText}>{title}</Text>
-    </TouchableOpacity>
-);
-
 const Login = ({navigation}) => {
-    const [email, enteredEmail] = React.useState(null);
-    const [passWord, enteredPassword] = React.useState(null);
+    const [input, setInput] = useState({
+        email: "",
+        password: ""
+    });
+
+    const LoginButton = ({onPress, title}) => (
+        <TouchableOpacity onPress={onPress} style={styles.loginButton}>
+            <Text style={styles.loginText}>{title}</Text>
+        </TouchableOpacity>
+    );
+
     return(
         <View style={styles.container}>
                 <View style={styles.imageContainer}>
@@ -21,14 +25,14 @@ const Login = ({navigation}) => {
                 <View>
                     <TextInput
                         style={styles.inputBox}
-                        value = {email}
-                        onChangeText = {enteredEmail}
+                        value={input.email}
+                        onChangeText={value => setInput(prevState => {return {...prevState, email: value}})}
                         placeholder={"Enter Email"}
                     />
                     <TextInput 
                         style={styles.inputBox}
-                        value={passWord}
-                        onChangeText={enteredPassword}
+                        value={input.password}
+                        onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
                         placeholder={"Enter Password"}
                     />
                     <LoginButton title={"Login"} size="lg" backgroundColor="#90ED65"/>

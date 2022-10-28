@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Login from './Login.js'
 import createAccount from './CreateAccount.js';
+import eventPages from './EventPages.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -19,6 +20,11 @@ const App = () => {
             name='createAccount'
             component={createAccount}
             options={{title: "Create Account"}}
+          />
+          <Stack.Screen
+            name='eventPages'
+            component={eventPages}
+            options={{title: "Events Page"}}
           />
         </Stack.Navigator>
     </NavigationContainer>

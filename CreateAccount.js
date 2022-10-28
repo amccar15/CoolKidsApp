@@ -1,20 +1,42 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, KeyboardAvoidingView } from "react-native";
-
-const AccountButton = ({onPress, title}) => (
-    <TouchableOpacity onPress={onPress} style={styles.accountButton}>
-        <Text style={styles.buttonText}>{title}</Text>
-    </TouchableOpacity>
-);
+import axios from "axios";
 
 const deviceWidth = Dimensions.get('window').width;
 
-const CreateAccount = () => {
-    const [email, enteredEmail] = React.useState(null);
-    const [phone, enteredPhone] = React.useState(null);
-    const [passWord, enteredPassword] = React.useState(null);
-    const [first, enteredFirst] = React.useState(null);
-    const [last, enteredLast] = React.useState(null);
+const CreateAccount = ({navigation}) => {
+    
+    const [input, setInput] = useState({
+        email: "",
+        phoneNumber: "",
+        password: "",
+        firstName: "",
+        lastName: ""
+    });
+
+    const AccountButton = ({title}) => (
+        <TouchableOpacity onPress={() => {registerUser(); navigation.navigate("eventPages")}} style={styles.accountButton}>
+            <Text style={styles.buttonText}>{title}</Text>
+        </TouchableOpacity>
+    );
+
+    const registerUser = async () => {
+        try{
+            let result = await axios.post(
+                'http://localhost:8080/api/v1/registration', 
+                {
+                    "firstName": input.firstName,
+                    "lastName": input.lastName,
+                    "email": input.email,
+                    "password": input.password
+                }
+            );
+            console.log(result.data);
+        } catch(error) {
+            console.log(error.response.data);
+        }
+    }
+
     return (
             <View style={styles.inputContainer}>
                 <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.inputContainer}>
@@ -24,32 +46,32 @@ const CreateAccount = () => {
                 <ScrollView>
                     <TextInput
                         style={styles.inputBox}
-                        value = {email}
-                        onChangeText = {enteredEmail}
+                        value={input.email}
+                        onChangeText = {value => setInput(prevState => {return {...prevState, email: value}})}
                         placeholder={"Enter Email"}
                     />
                     <TextInput 
                         style={styles.inputBox}
-                        value={phone}
-                        onChangeText={enteredPhone}
+                        value={input.phoneNumber}
+                        onChangeText={value => setInput(prevState => {return {...prevState, phoneNumber: value}})}
                         placeholder={"Enter Phone Number"}
                     />
                     <TextInput 
                         style={styles.inputBox}
-                        value={passWord}
-                        onChangeText={enteredPassword}
+                        value={input.password}
+                        onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
                         placeholder={"Enter Password"}
                     />
                     <TextInput 
                         style={styles.inputBox}
-                        value={first}
-                        onChangeText={enteredFirst}
+                        value={input.firstName}
+                        onChangeText={value => setInput(prevState => {return {...prevState, firstName: value}})}
                         placeholder={"Enter First Name"}
                     />
                     <TextInput 
                         style={styles.inputBox}
-                        value={last}
-                        onChangeText={enteredLast}
+                        value={input.lastName}
+                        onChangeText={value => setInput(prevState => {return {...prevState, lastName: value}})}
                         placeholder={"Enter Last Name"}
                     />
                     <AccountButton title={"Create Account"} size="lg"/>
