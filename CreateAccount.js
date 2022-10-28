@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, KeyboardAvoidingView } from "react-native";
 
 const AccountButton = ({onPress, title}) => (
     <TouchableOpacity onPress={onPress} style={styles.accountButton}>
@@ -17,6 +17,7 @@ const CreateAccount = () => {
     const [last, enteredLast] = React.useState(null);
     return (
             <View style={styles.inputContainer}>
+                <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'} style={styles.inputContainer}>
                 <View style={styles.imageContainer}>
                     <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
                 </View>
@@ -53,6 +54,7 @@ const CreateAccount = () => {
                     />
                     <AccountButton title={"Create Account"} size="lg"/>
                 </ScrollView>
+                </KeyboardAvoidingView>
             </View>
     );
 }
@@ -60,6 +62,7 @@ const CreateAccount = () => {
 const styles = StyleSheet.create({
     inputContainer: {
         position: 'relative',
+        flex: 1,
     },
     inputBox: {
         height: 40,
@@ -67,6 +70,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         padding: 10,
+        flex: 1,
     },
     accountButton: {
         margin: 10,
@@ -74,6 +78,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 10,
         backgroundColor:"#90ED65",
+        flex: 1,
     },
     buttonText: {
         fontSize: 18,
@@ -81,11 +86,12 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         alignSelf: "center",
         textTransform: "uppercase",
+        flex: 1,
     },
     imageContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        paddingBottom: 30,
+        paddingBottom: 15,
     },
     image: {
         alignContent: 'center',

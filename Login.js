@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 10,
         padding: 10,
+        flex: 1,
     },
     loginButton: {
         margin: 10,
@@ -59,6 +60,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 10,
         backgroundColor:"#90ED65",
+        flex: 1,
     },
     loginText: {
       fontSize: 18,
@@ -66,16 +68,19 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
       alignSelf: "center",
       textTransform: "uppercase",
+      flex: 1,
     },
     createAccountButton: {
       alignItems: "center",
       margin: 10,
+      flex: 1,
     },  
     createAccountText: {
       alignItems: "center",
       fontSize: 14,
       color: "black",
       textTransform: "uppercase",
+      flex: 1,
     },
     imageContainer: {
         justifyContent: 'center',
