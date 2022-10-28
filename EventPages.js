@@ -3,7 +3,7 @@ import { StyleSheet, Text } from "react-native";
 
 const EventPages = () => {
     return (
-        <Text style={styles.testText}> MOVE TO COME WITH COOLS KIDS APP</Text>
+        <Text style={styles.testText}> MORE TO COME WITH COOLS KIDS APP</Text>
     );
 }
 
