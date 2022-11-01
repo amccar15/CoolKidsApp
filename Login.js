@@ -1,4 +1,4 @@
-import { StyleSheet, TextInput, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, StatusBar } from 'react-native';
+import { StyleSheet, TextInput, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, StatusBar, Alert } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -10,11 +10,21 @@ const Login = ({navigation}) => {
         password: ""
     });
 
-    const LoginButton = ({onPress, title}) => (
-        <TouchableOpacity onPress={onPress} style={styles.loginButton}>
+    const LoginButton = ({title}) => (
+        <TouchableOpacity onPress={getUsers} style={styles.loginButton}>
             <Text style={styles.loginText}>{title}</Text>
         </TouchableOpacity>
     );
+    
+    const getUsers = async () => {
+        if(input.email === "austin@gmail.com" && input.password === "123") {
+            navigation.navigate("eventPages");
+            Alert.alert("Success!");
+        }
+        else {
+            Alert.alert("Email or Password do not match");
+        }
+    }
 
     return(
         <View style={styles.container}>

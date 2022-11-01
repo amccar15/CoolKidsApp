@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, KeyboardAvoidingView } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, KeyboardAvoidingView, Alert } from "react-native";
 import axios from "axios";
 
 const deviceWidth = Dimensions.get('window').width;
@@ -15,14 +15,14 @@ const CreateAccount = ({navigation}) => {
     });
 
     const AccountButton = ({title}) => (
-        <TouchableOpacity onPress={() => {registerUser(); navigation.navigate("eventPages")}} style={styles.accountButton}>
+        <TouchableOpacity onPress={registerUser} style={styles.accountButton}>
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     );
 
     const registerUser = async () => {
         try{
-            let result = await axios.post(
+            axios.post(
                 'http://localhost:8080/api/v1/registration', 
                 {
                     "firstName": input.firstName,
@@ -30,8 +30,13 @@ const CreateAccount = ({navigation}) => {
                     "email": input.email,
                     "password": input.password
                 }
-            );
-            console.log(result.data);
+            ).then((response) => {
+                if(response.ok) {
+                    Alert.alert("Could not register account");
+                } else {
+                    navigation.navigate("eventPages");
+                }
+            }).catch(error => console.log(error));
         } catch(error) {
             console.log(error.response.data);
         }
