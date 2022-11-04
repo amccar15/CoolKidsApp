@@ -20,25 +20,32 @@ const CreateAccount = ({navigation}) => {
         </TouchableOpacity>
     );
 
+    const config = {
+        method: 'post',
+        url: 'http://localhost:8080/api/v1/register',
+        headers: {
+            'Content-Type': 'text/plain;charset=UTF-8'
+        },
+        data : {
+            "firstName": input.firstName,
+            "lastName": input.lastName,                    
+            "email": input.email,
+            "password": input.password
+        }
+    }
+
     const registerUser = async () => {
-        try{
-            axios.post(
-                'http://localhost:8080/api/v1/registration', 
-                {
-                    "firstName": input.firstName,
-                    "lastName": input.lastName,
-                    "email": input.email,
-                    "password": input.password
-                }
-            ).then((response) => {
-                if(response.ok) {
+        try {
+            await axios(config).then((response) => {
+                console.log(response);
+                if(response.ok) {                    
                     Alert.alert("Could not register account");
                 } else {
-                    navigation.navigate("eventPages");
+                    navigation.navigate("homePage");
                 }
-            }).catch(error => console.log(error));
+            }).catch(e => console.log(e));
         } catch(error) {
-            console.log(error.response.data);
+            console.log(error);
         }
     }
 

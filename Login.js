@@ -11,18 +11,16 @@ const Login = ({navigation}) => {
     });
 
     const LoginButton = ({title}) => (
-        <TouchableOpacity onPress={getUsers} style={styles.loginButton}>
+        <TouchableOpacity onPress={() => {navigation.navigate("MenuNav"); getUsers()}} style={styles.loginButton}>
             <Text style={styles.loginText}>{title}</Text>
         </TouchableOpacity>
     );
     
     const getUsers = async () => {
-        if(input.email === "austin@gmail.com" && input.password === "123") {
-            navigation.navigate("eventPages");
-            Alert.alert("Success!");
-        }
-        else {
-            Alert.alert("Email or Password do not match");
+        try {
+            await axios.get("http://localhost:8080/api/v1/users").then((response) => console.log(response))
+        } catch(error) {
+            console.log(error);
         }
     }
 
