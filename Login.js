@@ -18,7 +18,7 @@ const Login = ({navigation}) => {
     
     const getUsers = async () => {
         try {
-            await axios.get("http://localhost:8080/api/v1/users").then((response) => console.log(response))
+            await axios.get("http://3.233.254.119/api/v1/users/").then((response) => console.log(response))
         } catch(error) {
             console.log(error);
         }
