@@ -18,7 +18,7 @@ const Drawer = createDrawerNavigator();
 const MenuNav = () => {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name='Home Page' component={homePage} />
+      <Drawer.Screen name='HomePage' component={homePage} />
       <Drawer.Screen name='Events' component={eventsPage} />
       <Drawer.Screen name='Settings' component={Settings} />
       <Drawer.Screen name='Messages' component={Messages} />

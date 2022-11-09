@@ -22,10 +22,7 @@ const CreateAccount = ({navigation}) => {
 
     const config = {
         method: 'post',
-        url: 'http://localhost:8080/api/v1/register',
-        headers: {
-            'Content-Type': 'text/plain;charset=UTF-8'
-        },
+        url: 'http://3.233.254.119/api/v1/register',
         data : {
             "firstName": input.firstName,
             "lastName": input.lastName,                    
@@ -38,10 +35,11 @@ const CreateAccount = ({navigation}) => {
         try {
             await axios(config).then((response) => {
                 console.log(response);
-                if(response.ok) {                    
-                    Alert.alert("Could not register account");
+                if(response.ok) {    
+                    navigation.navigate("HomePage");                
                 } else {
-                    navigation.navigate("homePage");
+                    console.log("Error: ", response);
+                    Alert.alert("Could not register account");
                 }
             }).catch(e => console.log(e));
         } catch(error) {
