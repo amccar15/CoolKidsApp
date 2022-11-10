@@ -1,18 +1,36 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, ScrollView } from 'react-native';
+import { Text, View, TextInput, ScrollView, TouchableOpacity} from 'react-native';
 import { IconButton } from "react-native-paper";
 import styles from './Styles.js';
+import axios from "axios";
 
 const CreateEvent = ({ navigation }) => {
 
     const [input, setInput] = useState({
         title: "",
         description: "",
-        image: "",
         location: "",
-        dateTime: "",
         capacity: "",
-    })
+    });
+
+    const TheEventButton = ({title}) => (
+        <TouchableOpacity onPress={createEvent} style={styles.EventButton}>
+            <Text style={styles.buttonText}>{title}</Text>
+        </TouchableOpacity>
+    );
+
+    const createEvent = async () => {
+        try {
+            await axios.post(
+                "ADD END POINT LATER",
+                {
+                    "add data here": input.title,
+                }
+            )
+        } catch(error) {
+            console.log(error);
+        }
+    }
 
     return (
         <View>
@@ -44,15 +62,10 @@ const CreateEvent = ({ navigation }) => {
                     <TextInput 
                         style={styles.inputBox}
                         value={input.dateTime}
-                        onChangeText={(value) => setInput(prevState => {return{...prevState, dateTime: value}})}
-                        placeholder={"Enter Event Time"}
-                    />
-                    <TextInput 
-                        style={styles.inputBox}
-                        value={input.dateTime}
                         onChangeText={(value) => setInput(prevState => {return{...prevState, capacity: value}})}
                         placeholder={"Enter Event Capacity"}
                     />
+                    <TheEventButton title={"Create Event"} size="lg" />
                 </ScrollView>
             </View>
         </View>

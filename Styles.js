@@ -109,4 +109,20 @@ export default StyleSheet.create({
         borderColor: "black",
         flex: 1,
     },
+    EventButton: {
+        margin: 10,
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 10,
+        backgroundColor:"#90ED65",
+        flex: 1,
+    },
+    buttonText: {
+        fontSize: 18,
+        color: "#fff",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: "uppercase",
+        flex: 1,
+    },
 })

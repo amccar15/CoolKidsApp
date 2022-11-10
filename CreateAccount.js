@@ -34,14 +34,12 @@ const CreateAccount = ({navigation}) => {
     const registerUser = async () => {
         try {
             await axios(config).then((response) => {
-                console.log(response);
-                if(response.ok) {    
-                    navigation.navigate("HomePage");                
-                } else {
-                    console.log("Error: ", response);
-                    Alert.alert("Could not register account");
-                }
-            }).catch(e => console.log(e));
+                console.log(response);  
+                navigation.navigate("HomePage");                
+            }).catch((e) => {
+                console.log(e);
+                Alert.alert("Could not register account");
+            });
         } catch(error) {
             console.log(error);
         }
