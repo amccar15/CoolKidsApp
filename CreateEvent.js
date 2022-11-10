@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, ScrollView, TouchableOpacity} from 'react-native';
+import { Text, View, TextInput, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import { IconButton } from "react-native-paper";
 import styles from './Styles.js';
 import axios from "axios";
@@ -29,6 +29,7 @@ const CreateEvent = ({ navigation }) => {
             )
         } catch(error) {
             console.log(error);
+            Alert.alert("Error Could not Create the Event, Try Again");
         }
     }
 

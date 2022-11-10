@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, FlatList } from 'react-native';
 import { IconButton } from "react-native-paper";
 import styles from './Styles.js';
+import axios from "axios";
 
 const eventData = [
     {
@@ -15,6 +16,18 @@ const eventData = [
 ];
 
 const EventsPage = ({navigation}) => {
+
+    useEffect(() => {
+        const GetEvents = async () => {
+            try{
+                axios.get("http://localhost:80/api/v1/events").then((response) => console.log(response)).catch((e) => console.log(e));
+            } catch(error) {
+                console.log(error);
+            }
+        }
+        GetEvents();
+    });
+
     return (
         <View>
             <View style={styles.UpperHome}>

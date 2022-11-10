@@ -8,13 +8,13 @@ const HomePage = ({navigation}) => {
         <View>
             <View style={styles.UpperHome}>
                 <IconButton icon="bell" iconColor="#FFFFFF" style={styles.notifcationBell} onPress={() => navigation.navigate("NotificationTab")}></IconButton>
-                <IconButton icon="account" style={styles.userPhoto}></IconButton>
+                <IconButton icon="account" style={styles.userPhoto} onPress={() => navigation.navigate("Settings")}></IconButton>
                 <Text style={styles.UpperHomeText}>Home</Text>
             </View>
             <View style={styles.lowerHome}>
                 <IconButton icon="calendar" containerColor="#3B48AF" iconColor="#FFFFFF" size={60} style={styles.calendar} onPress={() => {Alert.alert('"CoolKidsApp" Would Like to Open Your Calendar App')}}></IconButton>
                 <Text style={{position: 'relative', left: 68, top: 20}}>Calendar</Text>
-                <IconButton icon="account-group" containerColor="#3B48AF" iconColor="#FFFFFF" size={60} style={styles.eventsPageButton} onPress={() => navigation.navigate("StackEvent")}></IconButton>
+                <IconButton icon="account-group" containerColor="#3B48AF" iconColor="#FFFFFF" size={60} style={styles.eventsPageButton} onPress={() => navigation.navigate("Events")}></IconButton>
                 <Text style={{position: 'relative', alignSelf: 'flex-end', right: 75, top: 2}}>Events</Text>
                 <Text style={{position: 'relative', padding: 20, fontSize: 40, alignSelf: 'center', color: "#640D7A"}}>Upcoming</Text>
                 <ScrollView>

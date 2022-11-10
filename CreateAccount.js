@@ -3,6 +3,7 @@ import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View,
 import axios from "axios";
 
 const deviceWidth = Dimensions.get('window').width;
+const deviceHieght = Dimensions.get('window').height;
 
 const CreateAccount = ({navigation}) => {
     
@@ -51,39 +52,42 @@ const CreateAccount = ({navigation}) => {
                 <View style={styles.imageContainer}>
                     <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
                 </View>
-                <ScrollView>
-                    <TextInput
-                        style={styles.inputBox}
-                        value={input.email}
-                        onChangeText = {value => setInput(prevState => {return {...prevState, email: value}})}
-                        placeholder={"Enter Email"}
-                    />
-                    <TextInput 
-                        style={styles.inputBox}
-                        value={input.phoneNumber}
-                        onChangeText={value => setInput(prevState => {return {...prevState, phoneNumber: value}})}
-                        placeholder={"Enter Phone Number"}
-                    />
-                    <TextInput 
-                        style={styles.inputBox}
-                        value={input.password}
-                        onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
-                        placeholder={"Enter Password"}
-                    />
-                    <TextInput 
-                        style={styles.inputBox}
-                        value={input.firstName}
-                        onChangeText={value => setInput(prevState => {return {...prevState, firstName: value}})}
-                        placeholder={"Enter First Name"}
-                    />
-                    <TextInput 
-                        style={styles.inputBox}
-                        value={input.lastName}
-                        onChangeText={value => setInput(prevState => {return {...prevState, lastName: value}})}
-                        placeholder={"Enter Last Name"}
-                    />
-                    <AccountButton title={"Create Account"} size="lg"/>
-                </ScrollView>
+                <View style={styles.lowerHome}>
+                    <ScrollView>
+                        <Text style={{color: "white", fontSize: 30, position: 'absolute', alignSelf: 'center', top: '5%'}}>Create Account</Text>
+                        <TextInput
+                            style={styles.inputBox}
+                            value={input.email}
+                            onChangeText = {value => setInput(prevState => {return {...prevState, email: value}})}
+                            placeholder={"Enter Email"}
+                        />
+                        <TextInput 
+                            style={styles.inputBox}
+                            value={input.phoneNumber}
+                            onChangeText={value => setInput(prevState => {return {...prevState, phoneNumber: value}})}
+                            placeholder={"Enter Phone Number"}
+                        />
+                        <TextInput 
+                            style={styles.inputBox}
+                            value={input.password}
+                            onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
+                            placeholder={"Enter Password"}
+                        />
+                        <TextInput 
+                            style={styles.inputBox}
+                            value={input.firstName}
+                            onChangeText={value => setInput(prevState => {return {...prevState, firstName: value}})}
+                            placeholder={"Enter First Name"}
+                        />
+                        <TextInput 
+                            style={styles.inputBox}
+                            value={input.lastName}
+                            onChangeText={value => setInput(prevState => {return {...prevState, lastName: value}})}
+                            placeholder={"Enter Last Name"}
+                        />
+                        <AccountButton title={"Create Account"} size="lg"/>
+                    </ScrollView>
+                </View>
                 </KeyboardAvoidingView>
             </View>
     );
@@ -94,13 +98,22 @@ const styles = StyleSheet.create({
         position: 'relative',
         flex: 1,
     },
+    lowerHome: {
+        position: "absolute",
+        top: '35%',
+        width: deviceWidth,
+        height: deviceHieght,
+        borderRadius: 30,
+        backgroundColor: "#041598",
+    },
     inputBox: {
         height: 40,
         margin: 10,
         borderWidth: 1,
         borderRadius: 10,
         padding: 10,
-        flex: 1,
+        backgroundColor: 'white',
+        top: '15%'
     },
     accountButton: {
         margin: 10,
@@ -108,7 +121,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 10,
         backgroundColor:"#90ED65",
-        flex: 1,
+        top: '15%'
     },
     buttonText: {
         fontSize: 18,
@@ -116,7 +129,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         alignSelf: "center",
         textTransform: "uppercase",
-        flex: 1,
     },
     imageContainer: {
         justifyContent: 'center',

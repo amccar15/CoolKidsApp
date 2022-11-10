@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const deviceWidth = Dimensions.get('window').width;
+const deviceHieght = Dimensions.get('window').height;
 
 const Login = ({navigation}) => {
     const [input, setInput] = useState({
@@ -29,26 +30,29 @@ const Login = ({navigation}) => {
                 <View style={styles.imageContainer}>
                     <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
                 </View>
-            <ScrollView>
-                <View>
-                    <TextInput
-                        style={styles.inputBox}
-                        value={input.email}
-                        onChangeText={value => setInput(prevState => {return {...prevState, email: value}})}
-                        placeholder={"Enter Email"}
-                    />
-                    <TextInput 
-                        style={styles.inputBox}
-                        value={input.password}
-                        onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
-                        placeholder={"Enter Password"}
-                    />
-                    <LoginButton title={"Login"} size="lg" backgroundColor="#90ED65"/>
-                    <TouchableOpacity style={styles.createAccountButton} onPress={() => navigation.navigate("createAccount")}>
-                        <Text style={styles.createAccountText}>Create an Account</Text>
-                    </TouchableOpacity>
+            <View style={styles.lowerHome}>
+                <ScrollView>
+                    <View>
+                        <Text style={{color: "white", fontSize: 30, position: 'absolute', alignSelf: 'center', top: '5%'}}>Welcome Back!</Text>
+                        <TextInput
+                            style={styles.inputBox}
+                            value={input.email}
+                            onChangeText={value => setInput(prevState => {return {...prevState, email: value}})}
+                            placeholder={"Enter Email"}
+                        />
+                        <TextInput 
+                            style={styles.inputBox}
+                            value={input.password}
+                            onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
+                            placeholder={"Enter Password"}
+                        />
+                        <LoginButton title={"Login"} size="lg" backgroundColor="#90ED65"/>
+                        <TouchableOpacity style={styles.createAccountButton} onPress={() => navigation.navigate("createAccount")}>
+                            <Text style={styles.createAccountText}>Create an Account</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
                 </View>
-            </ScrollView>
         </View>
     );
 }
@@ -58,13 +62,23 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: StatusBar.currentHeight,
     },
+    lowerHome: {
+        position: "absolute",
+        top: "35%",
+        width: deviceWidth,
+        height: deviceHieght,
+        borderRadius: 30,
+        backgroundColor: "#041598",
+    },
     inputBox: {
         height: 40,
         margin: 10,
         borderWidth: 1,
         borderRadius: 10,
         padding: 10,
-        flex: 1,
+        borderColor: 'white',
+        backgroundColor: 'white',
+        top: "30%",
     },
     loginButton: {
         margin: 10,
@@ -72,7 +86,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 10,
         backgroundColor:"#90ED65",
-        flex: 1,
+        position: 'relative',
+        top: "30%"
     },
     loginText: {
       fontSize: 18,
@@ -80,19 +95,17 @@ const styles = StyleSheet.create({
       fontWeight: "bold",
       alignSelf: "center",
       textTransform: "uppercase",
-      flex: 1,
     },
     createAccountButton: {
       alignItems: "center",
       margin: 10,
-      flex: 1,
+      position: 'relative',
+      top: "30%"
     },  
     createAccountText: {
-      alignItems: "center",
       fontSize: 14,
-      color: "black",
+      color: "white",
       textTransform: "uppercase",
-      flex: 1,
     },
     imageContainer: {
         justifyContent: 'center',

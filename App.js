@@ -51,11 +51,6 @@ const App = () => {
             component={NotificationTab}
             options={{title: 'Notification Tab'}}
           />
-          <Stack.Screen
-            name='StackEvent'
-            component={eventsPage}
-            options={{title: 'Events'}}
-          />
         </Stack.Navigator>
     </NavigationContainer>
   );
