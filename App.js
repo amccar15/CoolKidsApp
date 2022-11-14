@@ -8,7 +8,7 @@ import homePage from './HomePage.js';
 import eventsPage from './EventsPage.js';
 import NotificationTab from './NotificationsTab.js';
 import Settings from './Settings.js'
-import Messages from './Messages.js';
+import TheEvent from './TheEvent.js';
 import CreateEvent from './CreateEvent.js';
 
 const Stack = createNativeStackNavigator();
@@ -21,7 +21,6 @@ const MenuNav = () => {
       <Drawer.Screen name='HomePage' component={homePage} />
       <Drawer.Screen name='Events' component={eventsPage} />
       <Drawer.Screen name='Settings' component={Settings} />
-      <Drawer.Screen name='Messages' component={Messages} />
       <Drawer.Screen name='CreateEvent' component={CreateEvent} />
     </Drawer.Navigator>
   );
@@ -50,6 +49,11 @@ const App = () => {
             name='NotificationTab'
             component={NotificationTab}
             options={{title: 'Notification Tab'}}
+          />
+          <Stack.Screen
+            name='TheEvent' 
+            component={TheEvent} 
+            initialParams={{eventID: ""}}
           />
         </Stack.Navigator>
     </NavigationContainer>

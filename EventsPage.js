@@ -1,32 +1,28 @@
-import React, { useEffect } from "react";
-import { Text, View, FlatList } from 'react-native';
+import React, { useState, useEffect } from "react";
+import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import { IconButton } from "react-native-paper";
 import styles from './Styles.js';
 import axios from "axios";
 
-const eventData = [
-    {
-        id: 1,
-        title: "test1"
-    },
-    {
-        id: 2,
-        title: "test2"
-    },
-];
-
 const EventsPage = ({navigation}) => {
+
+    const [eventData, setEventData] = useState([]);
 
     useEffect(() => {
         const GetEvents = async () => {
             try{
-                axios.get("http://localhost:80/api/v1/events").then((response) => console.log(response)).catch((e) => console.log(e));
+                axios
+                    .get("http://192.168.1.117:8080/api/v1/events")
+                    .then((response) => {
+                        setEventData(response.data.events);
+                    })
+                    .catch((e) => console.log(e));
             } catch(error) {
                 console.log(error);
             }
         }
         GetEvents();
-    });
+    }, []);
 
     return (
         <View>
@@ -41,7 +37,15 @@ const EventsPage = ({navigation}) => {
                         data={eventData}
                         renderItem={({ item }) => {return ( 
                             <View style={styles.eventDisplay}>
-                                <Text style={{fontSize: 32, color: "black"}}>{item.title}</Text>
+                                <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.id})}>
+                                    <Image source={require('./CoolKidsLogo.png')} style={{height: "50%", width: "95%", margin: 10, position: 'relative'}}/>
+                                    <Text style={{fontSize: 32, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventType}</Text>
+                                    <Text style={{fontSize: 14, color: "black", marginLeft: 10, position: "relative"}} numberOfLines={2}>{item.eventDescription}</Text>
+                                    <TouchableOpacity style={{backgroundColor: "#3B48AF", borderRadius: 10, height: 30, width: 75, marginLeft: 10, top: "12%"}}>
+                                        <Text style={{fontSize: 20,color: "white", alignSelf: "center", margin: 3}}>RSVP</Text>
+                                    </TouchableOpacity>
+                                    <IconButton icon="map-marker" iconColor="#FFFFFF" style={{backgroundColor: "#3B48AF", borderRadius: 10, height: 30, width: 75, marginRight: 10, alignSelf: 'flex-end'}}></IconButton>
+                                </TouchableOpacity>
                             </View>
                         )}}
                         keyExtractor={(item) => item.id}
