@@ -18,10 +18,10 @@ const Drawer = createDrawerNavigator();
 const MenuNav = () => {
   return (
     <Drawer.Navigator>
-      <Drawer.Screen name='HomePage' component={homePage} />
-      <Drawer.Screen name='Events' component={eventsPage} />
-      <Drawer.Screen name='Settings' component={Settings} />
-      <Drawer.Screen name='CreateEvent' component={CreateEvent} />
+      <Drawer.Screen name='HomePage' component={homePage} options={{title: "Home"}}/>
+      <Drawer.Screen name='Events' component={eventsPage} options={{title: "Events"}}/>
+      <Drawer.Screen name='Settings' component={Settings} options={{title: "Profile"}}/>
+      <Drawer.Screen name='CreateEvent' component={CreateEvent} options={{title: "Create an Event"}}/>
     </Drawer.Navigator>
   );
 }
