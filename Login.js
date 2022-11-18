@@ -1,6 +1,8 @@
 import { StyleSheet, TextInput, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, StatusBar, Alert } from 'react-native';
 import React, { useState } from 'react';
 import axios from 'axios';
+import ImageLogo from './components/ImageLogo';
+import LoginComponent from './components/LoginCoponent';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHieght = Dimensions.get('window').height;
@@ -26,35 +28,70 @@ const Login = ({navigation}) => {
     }
 
     return(
-        <View style={styles.container}>
-                <View style={styles.imageContainer}>
-                    <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
+
+        <View>
+            <ImageLogo 
+            imageSource={require('./CoolKidsLogo.png')}
+            />
+        
+                <View style= {{backgroundColor: "#041598", width: '100%', height:'66%'}}>
+                <Text style={{color: "white", fontSize: 30, position: 'absolute', alignSelf: 'center', top: '5%'}}>Welcome!</Text>
+                    <TextInput
+                        style={styles.inputBox}
+                        value={input.email}
+                        onChangeText={value => setInput(prevState => {return {...prevState, email: value}})}
+                        placeholder={"Enter Email"}
+                    />
+                    <TextInput 
+                        style={styles.inputBox}
+                        value={input.password}
+                        onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
+                        placeholder={"Enter Password"}
+                    />
+                    <LoginButton title={"Login"} size="lg" backgroundColor="#90ED65"/>
+                    <TouchableOpacity style={styles.createAccountButton} onPress={() => navigation.navigate("createAccount")}>
+                        <Text style={styles.createAccountText}>Create an Account</Text>
+                    </TouchableOpacity>
                 </View>
-            <View style={styles.lowerHome}>
-                <ScrollView>
-                    <View>
-                        <Text style={{color: "white", fontSize: 30, position: 'absolute', alignSelf: 'center', top: '5%'}}>Welcome Back!</Text>
-                        <TextInput
-                            style={styles.inputBox}
-                            value={input.email}
-                            onChangeText={value => setInput(prevState => {return {...prevState, email: value}})}
-                            placeholder={"Enter Email"}
-                        />
-                        <TextInput 
-                            style={styles.inputBox}
-                            value={input.password}
-                            onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
-                            placeholder={"Enter Password"}
-                        />
-                        <LoginButton title={"Login"} size="lg" backgroundColor="#90ED65"/>
-                        <TouchableOpacity style={styles.createAccountButton} onPress={() => navigation.navigate("createAccount")}>
-                            <Text style={styles.createAccountText}>Create an Account</Text>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
-                </View>
+            
+            
+            
         </View>
+
+
     );
+
+        
+
+        // <View style={styles.container}>
+        //         <View style={styles.imageContainer}>
+        //             <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
+        //         </View>
+        //     <View style={styles.lowerHome}>
+        //         <ScrollView>
+        //             <View>
+        //                 <Text style={{color: "white", fontSize: 30, position: 'absolute', alignSelf: 'center', top: '5%'}}>Welcome Back!</Text>
+        //                 <TextInput
+        //                     style={styles.inputBox}
+        //                     value={input.email}
+        //                     onChangeText={value => setInput(prevState => {return {...prevState, email: value}})}
+        //                     placeholder={"Enter Email"}
+        //                 />
+        //                 <TextInput 
+        //                     style={styles.inputBox}
+        //                     value={input.password}
+        //                     onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
+        //                     placeholder={"Enter Password"}
+        //                 />
+        //                 <LoginButton title={"Login"} size="lg" backgroundColor="#90ED65"/>
+        //                 <TouchableOpacity style={styles.createAccountButton} onPress={() => navigation.navigate("createAccount")}>
+        //                     <Text style={styles.createAccountText}>Create an Account</Text>
+        //                 </TouchableOpacity>
+        //             </View>
+        //         </ScrollView>
+        //         </View>
+        // </View>
+    //);
 }
 
 const styles = StyleSheet.create({
@@ -100,7 +137,8 @@ const styles = StyleSheet.create({
       alignItems: "center",
       margin: 10,
       position: 'relative',
-      top: "30%"
+      top: "30%",
+      backgroundColor:"#90ED65"
     },  
     createAccountText: {
       fontSize: 14,

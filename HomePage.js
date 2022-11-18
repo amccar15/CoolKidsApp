@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, ScrollView, Image, Alert } from "react-native";
+import { Text, View, ScrollView, Image, Alert,TouchableOpacity } from "react-native";
 import { IconButton } from "react-native-paper";
 import styles from './Styles.js';
 
