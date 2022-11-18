@@ -39,6 +39,7 @@ export default StyleSheet.create({
         height: deviceHieght,
         borderRadius: 30,
         backgroundColor: "#FFFFFF",
+        flex: 1
     },
     calendar: {
         width: 85,
@@ -56,25 +57,7 @@ export default StyleSheet.create({
         right: 50,
         top: 25,
     },
-    upcomingEventIcon1: {
-        width: deviceWidth - 10,
-        height: 125,
-        margin: 5,
-        padding: 10,
-        borderRadius: 15,
-        position: 'relative',
-        backgroundColor: '#90ED65'
-    },
-    upcomingEventIcon2: {
-        width: deviceWidth - 10,
-        height: 125,
-        margin: 5,
-        padding: 10,
-        borderRadius: 15,
-        position: 'relative',
-        backgroundColor: '#90ED65'
-    },
-    upcomingEventIcon3: {
+    upcomingEventIcon: {
         width: deviceWidth - 10,
         height: 125,
         margin: 5,
@@ -85,6 +68,8 @@ export default StyleSheet.create({
     },
     eventContainer: {
         marginTop: StatusBar.currentHeight || 0,
+        flexGrow: 1,
+        paddingBottom: 5
     },
     eventDisplay: {
         width: deviceWidth - 10,
@@ -94,6 +79,7 @@ export default StyleSheet.create({
         borderRadius: 15,
         position: 'relative',
         backgroundColor: '#90ED65',
+        flex: 1
     },
     inputText: {
         marginTop: StatusBar.currentHeight || 20,
@@ -134,4 +120,24 @@ export default StyleSheet.create({
         textTransform: "uppercase",
         flex: 1,
     },
+    RSVPButton: {
+        marginTop: 25,
+        marginLeft: 10,
+        marginRight: 10,
+        borderRadius: 10,
+        backgroundColor:"#90ED65",
+    },
+    RSVPText: {
+        color: "black",
+        fontSize: 30,
+        alignSelf: 'center',
+        position: 'relative'
+    },
+    image: {
+        alignContent: 'center',
+        width: deviceWidth,
+        height: 300,
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+    }
 })

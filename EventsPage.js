@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
 import { IconButton } from "react-native-paper";
 import styles from './components/Styles.js';
 import axios from "axios";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, View, TextInput, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import { IconButton } from "react-native-paper";
 import styles from './components/Styles.js';
@@ -6,34 +6,47 @@ import axios from "axios";
 
 const CreateEvent = ({ route, navigation }) => {
 
-    console.log(route.params.userID);
-
     const [input, setInput] = useState({
         title: "",
         description: "",
         location: "",
-        capacity: "",
+        capacity: 0,
+        contactPersonName: "",
+        contactPersonEmail: "",
+        contactPersonPhone: ""
     });
 
+    const getEventCreator = () => {
+        axios.get('http://192.168.1.129:8080/api/v1/users/id/' + route.params.userID)
+        .then((response) => {
+            setInput(prevState => {return {...prevState, contactPersonName: response.data.firstName + " " + response.data.lastName}});
+            setInput(prevState => {return {...prevState, contactPersonPhone: response.data.phoneNumber}});
+            setInput(prevState => {return {...prevState, contactPersonEmail: response.data.email}});
+        })
+        .catch((e) => console.log(e));
+    }
+
     const TheEventButton = ({title}) => (
-        <TouchableOpacity onPress={createEvent} style={styles.EventButton}>
+        <TouchableOpacity onPress={() => {createEvent(); navigation.navigate("HomePage");}} style={styles.EventButton}>
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     );
 
     const createEvent = async () => {
-        try {
-            await axios.post(
-                "ADD END POINT LATER",
-                {
-                    "add data here": input.title,
-                }
-            ).then((response) => console.log(response))
+        getEventCreator();
+        axios.post(
+            "http://192.168.1.129:8080/api/v1/events/new",
+            {
+                "maxAttendance": input.capacity,
+                "eventType": input.title,
+                "eventDescription": input.description,
+                "eventAddress": input.location,
+                "contactPersonName": input.contactPersonName,
+                "contactPersonPhoneNumber": input.contactPersonPhone,
+                "contactPersonEmail": input.contactPersonEmail
+            })
+            .then((response) => console.log(response))
             .catch((e) => console.log(e));
-        } catch(error) {
-            console.log(error);
-            Alert.alert("Error Could not Create the Event, Try Again");
-        }
     }
 
     return (
@@ -52,7 +65,7 @@ const CreateEvent = ({ route, navigation }) => {
                         placeholder={"Enter Event Title"}
                     />
                     <TextInput 
-                        style={styles.inputBox}
+                        style={styles.descBox}
                         value={input.description}
                         onChangeText={(value) => setInput(prevState => {return{...prevState, description: value}})}
                         placeholder={"Enter Event Description"}
@@ -65,7 +78,7 @@ const CreateEvent = ({ route, navigation }) => {
                     />
                     <TextInput 
                         style={styles.inputBox}
-                        value={input.dateTime}
+                        value={input.capacity}
                         onChangeText={(value) => setInput(prevState => {return{...prevState, capacity: value}})}
                         placeholder={"Enter Event Capacity"}
                     />
