@@ -32,7 +32,7 @@ const App = () => {
         <Stack.Navigator>
           <Stack.Screen 
             name='Login'
-            component={Login}
+            component={TheEvent}
             options={{title: "Login"}}
           />
           <Stack.Screen 

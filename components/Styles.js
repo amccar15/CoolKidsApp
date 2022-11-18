@@ -134,4 +134,26 @@ export default StyleSheet.create({
         textTransform: "uppercase",
         flex: 1,
     },
+    EventTitle: {
+        fontSize: 40,
+        alignSelf: 'center',
+        fontWeight: "bold",
+        flex: 1,
+
+    },
+    EventDetailsText:{
+        fontSize: 20,
+        flex: 1,
+    },
+    EventText: {
+        fontSize: 24,
+        flex: 1,
+
+    },
+    eventScrollView:{
+        flex: 1,
+        paddingTop:10,
+        paddingBottom:10,
+        paddingHorizontal:10
+    }
 })
