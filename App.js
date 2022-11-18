@@ -15,13 +15,13 @@ const Stack = createNativeStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
-const MenuNav = () => {
+const MenuNav = ({route}) => {
   return (
     <Drawer.Navigator>
       <Drawer.Screen name='HomePage' component={homePage} options={{title: "Home"}}/>
       <Drawer.Screen name='Events' component={eventsPage} options={{title: "Events"}}/>
-      <Drawer.Screen name='Settings' component={Settings} options={{title: "Profile"}}/>
-      <Drawer.Screen name='CreateEvent' component={CreateEvent} options={{title: "Create an Event"}}/>
+      <Drawer.Screen name='Settings' component={Settings} options={{title: "Profile"}} initialParams={{userID: route.params.accountID}}/>
+      <Drawer.Screen name='CreateEvent' component={CreateEvent} options={{title: "Create an Event"}} initialParams={{userID: route.params.accountID}}/>
     </Drawer.Navigator>
   );
 }
@@ -44,6 +44,7 @@ const App = () => {
             name='MenuNav'
             component={MenuNav}
             options={{ headerShown: false}}
+            initialParams={{accountID: ""}}
           />
           <Stack.Screen 
             name='NotificationTab'

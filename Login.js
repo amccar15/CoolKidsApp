@@ -1,97 +1,99 @@
 import { StyleSheet, TextInput, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, StatusBar, Alert } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ImageLogo from './components/ImageLogo';
-import LoginComponent from './components/LoginCoponent';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHieght = Dimensions.get('window').height;
 
 const Login = ({navigation}) => {
+
+    const [userList, getUserList] = useState([]);
+
     const [input, setInput] = useState({
+        userID: "",
         email: "",
-        password: ""
+        password: "",
+        hashPass: ""
     });
 
+    const loginINFO = []
+
     const LoginButton = ({title}) => (
-        <TouchableOpacity onPress={() => {navigation.navigate("MenuNav"); getUsers()}} style={styles.loginButton}>
+        <TouchableOpacity onPress={() => {loginUser()}} style={styles.loginButton}>
             <Text style={styles.loginText}>{title}</Text>
         </TouchableOpacity>
     );
     
-    const getUsers = async () => {
-        try {
-            await axios.get("http://3.233.254.119/api/v1/users/").then((response) => console.log(response))
-        } catch(error) {
-            console.log(error);
+    useEffect(() => {
+        const getUsers = async () => {
+            try {
+                axios.get("http://3.233.254.119/api/v1/users/").then((response) => {
+                    getUserList(response.data.users);
+                }).catch((e) => console.log(e));
+            } catch(error) {
+                console.log(error);
+            }
+        }
+        getUsers();
+    }, []);
+
+    const loginUser = () => {
+        
+        for(var i in userList) {
+            loginINFO.push(userList[i].email);
+        }
+        if(loginINFO.includes(input.email)) {
+            setInput(input.hashPass = userList[loginINFO.indexOf(input.email)].password);
+
+            setInput(input.userID = userList[loginINFO.indexOf(input.email)].id);
+
+            axios.get("http://192.168.1.129:8080/api/v1/users/checkPassword/" + input.password, {params: {hash: input.hashPass}})
+            .then((rep) => {
+                if(rep.data === true) {
+                    navigation.navigate("MenuNav", {accountID: input.userID});
+                } else {
+                    Alert.alert("Password is incorrect");
+                }
+            })
+            .catch((e) => console.log(e));
+        } else {
+            Alert.alert("Email is Incorrect");
         }
     }
 
     return(
 
-        <View>
-            <ImageLogo 
-            imageSource={require('./CoolKidsLogo.png')}
-            />
         
-                <View style= {{backgroundColor: "#041598", width: '100%', height:'66%'}}>
-                <Text style={{color: "white", fontSize: 30, position: 'absolute', alignSelf: 'center', top: '5%'}}>Welcome!</Text>
-                    <TextInput
-                        style={styles.inputBox}
-                        value={input.email}
-                        onChangeText={value => setInput(prevState => {return {...prevState, email: value}})}
-                        placeholder={"Enter Email"}
-                    />
-                    <TextInput 
-                        style={styles.inputBox}
-                        value={input.password}
-                        onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
-                        placeholder={"Enter Password"}
-                    />
-                    <LoginButton title={"Login"} size="lg" backgroundColor="#90ED65"/>
-                    <TouchableOpacity style={styles.createAccountButton} onPress={() => navigation.navigate("createAccount")}>
-                        <Text style={styles.createAccountText}>Create an Account</Text>
-                    </TouchableOpacity>
+
+         <View style={styles.container}>
+                <View style={styles.imageContainer}>
+                    <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
                 </View>
-            
-            
-            
-        </View>
-
-
+            <View style={styles.lowerHome}>
+                <ScrollView>
+                    <View>
+                        <Text style={{color: "white", fontSize: 30, position: 'absolute', alignSelf: 'center', top: '5%'}}>Welcome Back!</Text>
+                        <TextInput
+                            style={styles.inputBox}
+                            value={input.email}
+                            onChangeText={value => setInput(prevState => {return {...prevState, email: value}})}
+                            placeholder={"Enter Email"}
+                        />
+                        <TextInput 
+                            style={styles.inputBox}
+                            value={input.password}
+                            onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
+                            placeholder={"Enter Password"}
+                        />
+                        <LoginButton title={"Login"} size="lg" backgroundColor="#90ED65"/>
+                        <TouchableOpacity style={styles.createAccountButton} onPress={() => navigation.navigate("createAccount")}>
+                            <Text style={styles.createAccountText}>Create an Account</Text>
+                        </TouchableOpacity>
+                    </View>
+                </ScrollView>
+            </View>
+     </View>
     );
-
-        
-
-        // <View style={styles.container}>
-        //         <View style={styles.imageContainer}>
-        //             <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
-        //         </View>
-        //     <View style={styles.lowerHome}>
-        //         <ScrollView>
-        //             <View>
-        //                 <Text style={{color: "white", fontSize: 30, position: 'absolute', alignSelf: 'center', top: '5%'}}>Welcome Back!</Text>
-        //                 <TextInput
-        //                     style={styles.inputBox}
-        //                     value={input.email}
-        //                     onChangeText={value => setInput(prevState => {return {...prevState, email: value}})}
-        //                     placeholder={"Enter Email"}
-        //                 />
-        //                 <TextInput 
-        //                     style={styles.inputBox}
-        //                     value={input.password}
-        //                     onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
-        //                     placeholder={"Enter Password"}
-        //                 />
-        //                 <LoginButton title={"Login"} size="lg" backgroundColor="#90ED65"/>
-        //                 <TouchableOpacity style={styles.createAccountButton} onPress={() => navigation.navigate("createAccount")}>
-        //                     <Text style={styles.createAccountText}>Create an Account</Text>
-        //                 </TouchableOpacity>
-        //             </View>
-        //         </ScrollView>
-        //         </View>
-        // </View>
-    //);
 }
 
 const styles = StyleSheet.create({
@@ -138,7 +140,6 @@ const styles = StyleSheet.create({
       margin: 10,
       position: 'relative',
       top: "30%",
-      backgroundColor:"#90ED65"
     },  
     createAccountText: {
       fontSize: 14,

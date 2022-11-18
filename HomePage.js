@@ -1,7 +1,7 @@
 import React from "react";
 import { Text, View, ScrollView, Image, Alert,TouchableOpacity } from "react-native";
 import { IconButton } from "react-native-paper";
-import styles from './Styles.js';
+import styles from './components/Styles.js';
 
 const HomePage = ({navigation}) => {
     return (

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import axios from 'axios';
-import styles from './Styles.js';
+import styles from './components/Styles.js';
 
 const TheEvent = ({route, navigation}) => {
 

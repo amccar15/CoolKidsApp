@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Text, View, TextInput, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import { IconButton } from "react-native-paper";
-import styles from './Styles.js';
+import styles from './components/Styles.js';
 import axios from "axios";
 
-const CreateEvent = ({ navigation }) => {
+const CreateEvent = ({ route, navigation }) => {
+
+    console.log(route.params.userID);
 
     const [input, setInput] = useState({
         title: "",
@@ -26,7 +28,8 @@ const CreateEvent = ({ navigation }) => {
                 {
                     "add data here": input.title,
                 }
-            )
+            ).then((response) => console.log(response))
+            .catch((e) => console.log(e));
         } catch(error) {
             console.log(error);
             Alert.alert("Error Could not Create the Event, Try Again");

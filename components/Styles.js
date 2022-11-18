@@ -109,6 +109,15 @@ export default StyleSheet.create({
         borderColor: "black",
         flex: 1,
     },
+    descBox: {
+        marginTop: StatusBar.currentHeight || 40,
+        height: 150,
+        width: deviceWidth - 25,
+        margin: 10,
+        borderWidth: 1,
+        borderColor: "black",
+        flex: 1,
+    }, 
     EventButton: {
         margin: 10,
         paddingVertical: 12,
