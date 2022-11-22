@@ -10,7 +10,7 @@ import NotificationTab from './NotificationsTab.js';
 import Settings from './Settings.js'
 import TheEvent from './TheEvent.js';
 import CreateEvent from './CreateEvent.js';
-import HomePage from './HomePage.js';
+import { IconButton } from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,11 +18,38 @@ const Drawer = createDrawerNavigator();
 
 const MenuNav = ({route}) => {
   return (
-    <Drawer.Navigator>
-      <Drawer.Screen name='HomePage' component={homePage} options={{title: "Home"}}/>
-      <Drawer.Screen name='Events' component={eventsPage} options={{title: "Events"}}/>
-      <Drawer.Screen name='Settings' component={Settings} options={{title: "Profile"}} initialParams={{userID: route.params.accountID}}/>
-      <Drawer.Screen name='CreateEvent' component={CreateEvent} options={{title: "Create an Event"}} initialParams={{userID: route.params.accountID}}/>
+    <Drawer.Navigator
+      screenOptions={{
+        drawerActiveBackgroundColor: "#041598",
+        drawerActiveTintColor: '#fff',
+        drawerInactiveTintColor: '#333',
+        drawerLabelStyle: {
+          marginLeft: 10,
+          fontFamily: 'ArialRoundedMTBold',
+          fontSize: 15,
+        },
+      }}
+    >
+      <Drawer.Screen name='HomePage' component={homePage} 
+        options={
+          {title: "Home", drawerIcon: ({color}) => (<IconButton icon="home" iconColor={color}/>)}
+        }
+      />
+      <Drawer.Screen name='Events' component={eventsPage} 
+        options={
+          {title: "Events", drawerIcon: ({color}) => (<IconButton icon="account-group" iconColor={color}/>)}
+        }
+      />
+      <Drawer.Screen name='Settings' component={Settings} 
+        options={
+          {title: "Profile", drawerIcon: ({color}) => (<IconButton icon="account" iconColor={color}/>)}} initialParams={{userID: route.params.accountID}
+        }
+      />
+      <Drawer.Screen name='CreateEvent' component={CreateEvent} 
+        options={
+          {title: "Create an Event", drawerIcon: ({color}) => (<IconButton icon="pencil" iconColor={color}/>)}} initialParams={{userID: route.params.accountID}
+          }
+      />
     </Drawer.Navigator>
   );
 }

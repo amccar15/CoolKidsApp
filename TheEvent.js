@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text ,Button, FlatList, ScrollView } from 'react-native';
+import { View, Text, Button, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import axios from 'axios';
 import styles from './components/Styles.js';
@@ -36,7 +36,13 @@ const TheEvent = ({route, navigation}) => {
                 .catch(error => console.log(error));
         }
         getEventById();
-    }, []);
+    });
+
+    const RSVPButton = ({title}) => (
+        <TouchableOpacity style={styles.RSVPButton}>
+            <Text style={styles.RSVPText}>{title}</Text>
+        </TouchableOpacity>
+    );
 
     return (
         <View>
@@ -47,27 +53,22 @@ const TheEvent = ({route, navigation}) => {
                 <Text style={styles.UpperHomeText}>{currentEvent.eventType}</Text>
             </View>
             <View style={styles.lowerHome}>
-                {/* <Text>{currentEvent.eventStartDateTime}</Text>
-                <Text>{currentEvent.eventDescription}</Text> */}
-                <ScrollView style={styles.eventScrollView} contentContainerStyle={{flex:1}} >
-                <Text style= {styles.EventTitle}>{testEvent.eventTitle}</Text>
-                <Text >{testEvent.eventStartDateTime} to {testEvent.eventEndDateTime}</Text>
-                <Text>Location: {testEvent.eventAddress}</Text>
-                <Button title='RSVP for event!'></Button>
-                <Text>Current RSVPs: {testEvent.currentRSVPS}</Text>
-                <Text>Max attendance: {testEvent.maxAttendance}</Text>
-                <Text style={styles.EventText}>{testEvent.eventDescription}</Text>
-                
-                <Text>Host: {testEvent.contactPersonName}</Text>
-                <Text>Email: {testEvent.contactPersonEmail}</Text>
-                <Text>Phone: {testEvent.contactPersonPhoneNumber}</Text>
+                <ScrollView>
+                    <View style={{flex: 1, height: 1000}}>
+                        <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
+                        <RSVPButton title="RSVP For the Event" size='lg'/>
+                        <Text>{currentEvent.eventStartDateTime} to {testEvent.eventEndDateTime}</Text>
+                        <Text>Location: {testEvent.eventAddress}</Text>
+                        <Text style={{fontFamily: 'ArialRoundedMTBold', fontSize: 25, marginLeft: 10, padding: 10}}>Going: {currentEvent.currentRSVPS} / {currentEvent.maxAttendance}</Text>
+                        <View style={{margin: 10, borderStyle: "solid", borderColor: "black", borderWidth: 1, height: 200}}>
+                            <Text style={{marginLeft: 10}}>{currentEvent.eventDescription}</Text>
+                        </View>
+                        <Text style={{marginLeft: 10, fontSize: 20, fontWeight: "bold"}}>Contact Info: </Text>
+                        <Text style={{marginLeft: 25}}>{currentEvent.contactPersonName}</Text>
+                        <Text style={{marginLeft: 25}}>{currentEvent.contactPersonPhoneNumber}</Text>
+                        <Text style={{marginLeft: 25}}>{currentEvent.contactPersonEmail}</Text>
+                    </View>
                 </ScrollView>
-
-                
-
-                
-                
-
             </View>
             
         </View>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
+import { Text, View, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
 import { IconButton } from "react-native-paper";
 import styles from './components/Styles.js';
 import axios from "axios";
@@ -12,7 +12,7 @@ const EventsPage = ({navigation}) => {
         const GetEvents = async () => {
             try{
                 axios
-                    .get("http://192.168.1.129:8080/api/v1/events")
+                    .get("http://172.16.254.143:8080/api/v1/events")
                     .then((response) => {
                         setEventData(response.data.events);
                     })
