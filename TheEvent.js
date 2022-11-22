@@ -11,7 +11,7 @@ const TheEvent = ({route, navigation}) => {
     useEffect(() => {
         const getEventById = async () => {
             axios
-                .get("http://192.168.1.129:8080/api/v1/events/" + route.params.eventID)
+                .get("http://192.168.1.117:8080/api/v1/events/" + route.params.eventID)
                 .then((response) => {
                     setCurrentEvent(response.data);
                     console.log(response.data);
@@ -19,7 +19,7 @@ const TheEvent = ({route, navigation}) => {
                 .catch(error => console.log(error));
         }
         getEventById();
-    }, []);
+    });
 
     const RSVPButton = ({title}) => (
         <TouchableOpacity style={styles.RSVPButton}>
@@ -39,6 +39,7 @@ const TheEvent = ({route, navigation}) => {
                     <View style={{flex: 1, height: 1000}}>
                         <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
                         <RSVPButton title="RSVP For the Event" size='lg'/>
+                        <Text style={{fontFamily: 'ArialRoundedMTBold', fontSize: 25, marginLeft: 10, padding: 10}}>Going: {currentEvent.currentRSVPS} / {currentEvent.maxAttendance}</Text>
                         <View style={{margin: 10, borderStyle: "solid", borderColor: "black", borderWidth: 1, height: 200}}>
                             <Text style={{marginLeft: 10}}>{currentEvent.eventDescription}</Text>
                         </View>

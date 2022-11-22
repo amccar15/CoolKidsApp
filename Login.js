@@ -26,18 +26,16 @@ const Login = ({navigation}) => {
     
     useEffect(() => {
         const getUsers = async () => {
-            try {
-                axios.get("http://3.233.254.119/api/v1/users/").then((response) => {
-                    getUserList(response.data.users);
-                }).catch((e) => console.log(e));
-            } catch(error) {
-                console.log(error);
-            }
+            axios.get("http://3.233.254.119/api/v1/users/")
+            .then((response) => {
+                getUserList(response.data.users);
+            })
+            .catch((e) => console.log(e));
         }
         getUsers();
     }, []);
 
-    const loginUser = () => {
+    const loginUser = async () => {
         
         for(var i in userList) {
             loginINFO.push(userList[i].email);
@@ -47,7 +45,7 @@ const Login = ({navigation}) => {
 
             setInput(input.userID = userList[loginINFO.indexOf(input.email)].id);
 
-            axios.get("http://192.168.1.129:8080/api/v1/users/checkPassword/" + input.password, {params: {hash: input.hashPass}})
+            axios.get("http://192.168.1.117:8080/api/v1/users/checkPassword/" + input.password, {params: {hash: input.hashPass}})
             .then((rep) => {
                 if(rep.data === true) {
                     navigation.navigate("MenuNav", {accountID: input.userID});
@@ -62,9 +60,6 @@ const Login = ({navigation}) => {
     }
 
     return(
-
-        
-
          <View style={styles.container}>
                 <View style={styles.imageContainer}>
                     <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>

@@ -8,7 +8,7 @@ const HomePage = ({navigation}) => {
 
     useEffect(() => {
         const getUpcomingEvents = async () => {
-            axios.get("http://192.168.1.129:8080/api/v1/events")
+            axios.get("http://192.168.1.117:8080/api/v1/events")
                 .then((response) => setUpcomingEvents(response.data.events))
                 .catch((e) => console.log(e));
         }
@@ -31,7 +31,7 @@ const HomePage = ({navigation}) => {
                 <Text style={{position: 'relative', alignSelf: 'flex-end', right: 75, top: 2}}>Events</Text>
                 <Text style={{position: 'relative', padding: 20, fontSize: 40, alignSelf: 'center', color: "#640D7A"}}>Upcoming</Text>
                 <FlatList
-                    contentContainerStyle={{height: 1500}}
+                    contentContainerStyle={{height: 2000}}
                     data={UpcomingEvents}
                     renderItem={({ item }) => {return ( 
                         <View style={styles.upcomingEventIcon}>
