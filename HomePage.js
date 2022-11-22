@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, ScrollView, Image, Alert,TouchableOpacity } from "react-native";
+import { Text, View, ScrollView, Image, Alert,TouchableOpacity,Linking } from "react-native";
 import { IconButton } from "react-native-paper";
 import styles from './components/Styles.js';
 
@@ -12,7 +12,30 @@ const HomePage = ({navigation}) => {
                 <Text style={styles.UpperHomeText}>Home</Text>
             </View>
             <View style={styles.lowerHome}>
-                <IconButton icon="calendar" containerColor="#3B48AF" iconColor="#FFFFFF" size={60} style={styles.calendar} onPress={() => {Alert.alert('"CoolKidsApp" Would Like to Open Your Calendar App')}}></IconButton>
+                <IconButton icon="calendar" containerColor="#3B48AF" iconColor="#FFFFFF" size={60} style={styles.calendar} 
+                onPress={() => {
+                    Alert.alert('Open Calendar?','"CoolKidsApp" Would Like to Open Your Calendar App',
+                    [
+                        {
+                            text:"Cancel",
+                            onPress: () => console.log("cancled"),
+                            style: "cancel"
+                        },
+
+                        {
+                            text:"OK",
+                            onPress: () => {if(Platform.OS === 'ios') {
+                                Linking.openURL('calshow:');
+                              } else if(Platform.OS === 'android') { 
+                                Linking.openURL('content://com.android.calendar/time/');
+                              }}
+                            
+                        }
+                    ]
+                    )}
+            }>
+
+                </IconButton>
                 <Text style={{position: 'relative', left: 68, top: 20}}>Calendar</Text>
                 <IconButton icon="account-group" containerColor="#3B48AF" iconColor="#FFFFFF" size={60} style={styles.eventsPageButton} onPress={() => navigation.navigate("Events")}></IconButton>
                 <Text style={{position: 'relative', alignSelf: 'flex-end', right: 75, top: 2}}>Events</Text>

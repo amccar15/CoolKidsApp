@@ -10,6 +10,7 @@ import NotificationTab from './NotificationsTab.js';
 import Settings from './Settings.js'
 import TheEvent from './TheEvent.js';
 import CreateEvent from './CreateEvent.js';
+import HomePage from './HomePage.js';
 
 const Stack = createNativeStackNavigator();
 
