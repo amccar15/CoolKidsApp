@@ -12,7 +12,7 @@ const EventsPage = ({navigation}) => {
         const GetEvents = async () => {
             try{
                 axios
-                    .get("http://192.168.1.117:8080/api/v1/events")
+                    .get("http://172.16.254.143:8080/api/v1/events")
                     .then((response) => {
                         setEventData(response.data.events);
                     })

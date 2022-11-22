@@ -8,7 +8,7 @@ const HomePage = ({navigation}) => {
 
     useEffect(() => {
         const getUpcomingEvents = async () => {
-            axios.get("http://192.168.1.117:8080/api/v1/events")
+            axios.get("http://172.16.254.143:8080/api/v1/events")
                 .then((response) => setUpcomingEvents(response.data.events))
                 .catch((e) => console.log(e));
         }

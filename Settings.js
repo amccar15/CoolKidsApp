@@ -8,7 +8,7 @@ const Settings = ({route, navigation}) => {
 
     useEffect(() => {
         const getProfileInfo = async () => {
-            axios.get('http://192.168.1.117:8080/api/v1/users/id/' + route.params.userID)
+            axios.get('http://172.16.254.143:8080/api/v1/users/id/' + route.params.userID)
                         .then((response) => {
                             setUserInfo(prevState => {return {...prevState, username: response.data.firstName + " " + response.data.lastName}});
                             setUserInfo(prevState => {return {...prevState, userTitle: response.data.userRole}});

@@ -45,7 +45,7 @@ const Login = ({navigation}) => {
 
             setInput(input.userID = userList[loginINFO.indexOf(input.email)].id);
 
-            axios.get("http://192.168.1.117:8080/api/v1/users/checkPassword/" + input.password, {params: {hash: input.hashPass}})
+            axios.get("http://172.16.254.143:8080/api/v1/users/checkPassword/" + input.password, {params: {hash: input.hashPass}})
             .then((rep) => {
                 if(rep.data === true) {
                     navigation.navigate("MenuNav", {accountID: input.userID});

@@ -1,32 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Text, View, TextInput, ScrollView, TouchableOpacity, Button, Platform} from 'react-native';
+import React, { useState } from "react";
+import { Text, View, TextInput, ScrollView, TouchableOpacity, Button, Image} from 'react-native';
 import { IconButton } from "react-native-paper";
+import * as ImagePicker from 'expo-image-picker';
 import styles from './components/Styles.js';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 
 const CreateEvent = ({ route, navigation }) => {
 
-    const [date, setDate] = useState(new Date());
-    const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(false);
-
-    const openModalDate = () => {
-        setShow(true);
-        setMode('date');
-    }
-
-    const openModalTime = () => {
-        setShow(true);
-        setMode('time');
-    }
-
-    const onChange = (selectedDate) => {
-        const currentDate = selectedDate || date;
-        setDate(currentDate);
-        setShow(false);
-    }
-
+    //creating hooks for user input
     const [input, setInput] = useState({
         title: "",
         description: "",
@@ -37,8 +19,54 @@ const CreateEvent = ({ route, navigation }) => {
         contactPersonPhone: ""
     });
 
+    //creating hooks for image picker
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
+    //set mode and show for date picker
+    const openModalDate = () => {
+        setShow(true);
+        setMode('date');
+    }
+
+    //setting mode and show for time picker
+    const openModalTime = () => {
+        setShow(true);
+        setMode('time');
+    }
+
+    //when the date or time is selected, set the hook to the current date choosen and close picker
+    const onChange = (selectedDate) => {
+        const currentDate = selectedDate || date;
+        setDate(currentDate);
+        setShow(false);
+    }
+
+    const [image, setImage] = useState([]);
+
+    const pickImage = async () => {
+        try {
+            var result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.Images,
+                allowsEditing: true,
+                aspect: [4,3],
+                quality: 1
+            });
+
+            console.log(result);
+
+            if(!result.cancelled) {
+                setImage(result.uri);
+            }
+        } catch(e) {
+            console.log(e);
+        }
+    };
+
+    //gets the user info for who is creating the event
     const getEventCreator = () => {
-        axios.get('http://192.168.1.117:8080/api/v1/users/id/' + route.params.userID)
+        axios.get('http://172.16.254.143:8080/api/v1/users/id/' + route.params.userID)
         .then((response) => {
             setInput(prevState => {return {...prevState, contactPersonName: response.data.firstName + " " + response.data.lastName}});
             setInput(prevState => {return {...prevState, contactPersonPhone: response.data.phoneNumber}});
@@ -47,16 +75,18 @@ const CreateEvent = ({ route, navigation }) => {
         .catch((e) => console.log(e));
     }
 
+    //styling and creating the create event button
     const TheEventButton = ({title}) => (
         <TouchableOpacity onPress={() => {createEvent(); navigation.navigate("HomePage");}} style={styles.EventButton}>
             <Text style={styles.buttonText}>{title}</Text>
         </TouchableOpacity>
     );
 
+    //sending event to the database
     const createEvent = async () => {
         getEventCreator();
         axios.post(
-            "http://192.168.1.129:8080/api/v1/events/new",
+            "http://172.16.254.143:8080/api/v1/events/new",
             {
                 "maxAttendance": input.capacity,
                 "eventType": input.title,
@@ -79,6 +109,8 @@ const CreateEvent = ({ route, navigation }) => {
             </View>
             <View style={styles.lowerHome}>
                 <ScrollView>
+                    <Button title="Add an Event Cover Photo" onPress={pickImage} />
+                    {image && <Image source={{uri: image}} style={{ width: 200, height: 200, alignSelf: 'center' }} />}
                     <Text style={{position: 'relative', marginLeft: 10, marginTop: 10, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Title:</Text>
                     <TextInput 
                         style={styles.inputBox}
