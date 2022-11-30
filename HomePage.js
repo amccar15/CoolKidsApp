@@ -4,11 +4,19 @@ import { IconButton } from "react-native-paper";
 import styles from './components/Styles.js';
 import axios from "axios";
 
-const HomePage = ({navigation}) => {
+const HomePage = ({route, navigation}) => {
+
+    const config = {
+        method: 'get',
+        url: 'http://192.168.1.117:8080/api/v1/events',
+        headers: {
+            Authorization: "Bearer " + route.params.userToken
+        }
+    }
 
     useEffect(() => {
         const getUpcomingEvents = async () => {
-            axios.get("http://172.16.254.143:8080/api/v1/events")
+            await axios(config)
                 .then((response) => setUpcomingEvents(response.data.events))
                 .catch((e) => console.log(e));
         }

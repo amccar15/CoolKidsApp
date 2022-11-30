@@ -68,8 +68,7 @@ export default StyleSheet.create({
     },
     eventContainer: {
         marginTop: StatusBar.currentHeight || 0,
-        flexGrow: 1,
-        paddingBottom: 5
+        
     },
     eventDisplay: {
         width: deviceWidth - 10,

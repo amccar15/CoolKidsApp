@@ -1,5 +1,5 @@
 import { StyleSheet, TextInput, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, StatusBar, Alert } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -7,57 +7,27 @@ const deviceHieght = Dimensions.get('window').height;
 
 const Login = ({navigation}) => {
 
-    const [userList, getUserList] = useState([]);
-
     const [input, setInput] = useState({
-        userID: "",
-        email: "",
-        password: "",
-        hashPass: ""
+        username: "",
+        password: ""
     });
-
-    const loginINFO = []
+    
+    const loginInfo = async () => {
+        await axios.post("http://192.168.1.117:8080/api/auth/signin", {
+            "username": input.username,
+            "password": input.password
+        })
+            .then((response) => {
+                navigation.navigate("MenuNav", {accountID: response.data.id, accountToken: response.data.accessToken})
+            })
+            .catch((e) => {console.log(e); Alert.alert("Email or Password is incorrect")});
+    }
 
     const LoginButton = ({title}) => (
-        <TouchableOpacity onPress={() => {loginUser()}} style={styles.loginButton}>
+        <TouchableOpacity onPress={() => {loginInfo()}} style={styles.loginButton}>
             <Text style={styles.loginText}>{title}</Text>
         </TouchableOpacity>
     );
-    
-    useEffect(() => {
-        const getUsers = async () => {
-            axios.get("http://3.233.254.119/api/v1/users/")
-            .then((response) => {
-                getUserList(response.data.users);
-            })
-            .catch((e) => console.log(e));
-        }
-        getUsers();
-    }, []);
-
-    const loginUser = async () => {
-        
-        for(var i in userList) {
-            loginINFO.push(userList[i].email);
-        }
-        if(loginINFO.includes(input.email)) {
-            setInput(input.hashPass = userList[loginINFO.indexOf(input.email)].password);
-
-            setInput(input.userID = userList[loginINFO.indexOf(input.email)].id);
-
-            axios.get("http://172.16.254.143:8080/api/v1/users/checkPassword/" + input.password, {params: {hash: input.hashPass}})
-            .then((rep) => {
-                if(rep.data === true) {
-                    navigation.navigate("MenuNav", {accountID: input.userID});
-                } else {
-                    Alert.alert("Password is incorrect");
-                }
-            })
-            .catch((e) => console.log(e));
-        } else {
-            Alert.alert("Email is Incorrect");
-        }
-    }
 
     return(
          <View style={styles.container}>
@@ -71,8 +41,8 @@ const Login = ({navigation}) => {
                         <TextInput
                             style={styles.inputBox}
                             value={input.email}
-                            onChangeText={value => setInput(prevState => {return {...prevState, email: value}})}
-                            placeholder={"Enter Email"}
+                            onChangeText={value => setInput(prevState => {return {...prevState, username: value}})}
+                            placeholder={"Enter Username"}
                         />
                         <TextInput 
                             style={styles.inputBox}

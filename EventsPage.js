@@ -4,22 +4,25 @@ import { IconButton } from "react-native-paper";
 import styles from './components/Styles.js';
 import axios from "axios";
 
-const EventsPage = ({navigation}) => {
+const EventsPage = ({route, navigation}) => {
 
     const [eventData, setEventData] = useState([]);
 
+    const config = {
+        method: 'get',
+        url: 'http://192.168.1.117:8080/api/v1/events',
+        headers: {
+            Authorization: "Bearer " + route.params.userToken
+        }
+    }
+
     useEffect(() => {
         const GetEvents = async () => {
-            try{
-                axios
-                    .get("http://172.16.254.143:8080/api/v1/events")
-                    .then((response) => {
-                        setEventData(response.data.events);
-                    })
-                    .catch((e) => console.log(e));
-            } catch(error) {
-                console.log(error);
-            }
+            await axios(config)
+                .then((response) => {
+                    setEventData(response.data.events);
+                })
+                .catch((e) => console.log(e));
         }
         GetEvents();
     }, []);
