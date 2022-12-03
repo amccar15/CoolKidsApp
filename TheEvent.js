@@ -10,7 +10,7 @@ const TheEvent = ({route, navigation}) => {
 
     const config = {
         method: 'get',
-        url: 'http://192.168.1.117:8080/api/v1/events/ ' + route.params.eventID,
+        url: 'http://192.168.1.117:8080/api/v1/events/' + route.params.eventID,
         headers: {
             Authorization: "Bearer " + route.params.userToken
         }
@@ -26,7 +26,7 @@ const TheEvent = ({route, navigation}) => {
                 .catch(error => console.log(error));
         }
         getEventById();
-    });
+    }, []);
 
     const RSVPButton = ({title}) => (
         <TouchableOpacity style={styles.RSVPButton}>

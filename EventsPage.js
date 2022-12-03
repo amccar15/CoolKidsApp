@@ -40,9 +40,9 @@ const EventsPage = ({route, navigation}) => {
                         data={eventData}
                         renderItem={({ item }) => {return ( 
                             <View style={styles.eventDisplay}>
-                                <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.id})}>
+                                <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.id, userToken: route.params.userToken})}>
                                     <Image source={require('./CoolKidsLogo.png')} style={{height: "50%", width: "95%", margin: 10, position: 'relative'}}/>
-                                    <Text style={{fontSize: 32, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventType}</Text>
+                                    <Text style={{fontSize: 32, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventTitle}</Text>
                                     <Text style={{fontSize: 14, color: "black", marginLeft: 10, position: "relative"}} numberOfLines={2}>{item.eventDescription}</Text>
                                     <TouchableOpacity style={{backgroundColor: "#3B48AF", borderRadius: 10, height: 30, width: 75, marginLeft: 10, top: "12%"}}>
                                         <Text style={{fontSize: 20,color: "white", alignSelf: "center", margin: 3}}>RSVP</Text>

@@ -66,9 +66,9 @@ const HomePage = ({route, navigation}) => {
                     data={UpcomingEvents}
                     renderItem={({ item }) => {return ( 
                         <View style={styles.upcomingEventIcon}>
-                            <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.id})}>
+                            <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.id, userToken: route.params.userToken})}>
                                 <Image source={require('./CoolKidsLogo.png')} style={{height: "50%", width: "95%", marginBottom: 10, marginLeft: 10, position: 'relative'}}/>
-                                <Text style={{fontSize: 20, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventType}</Text>
+                                <Text style={{fontSize: 20, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventTitle}</Text>
                                 <Text style={{fontSize: 14, color: "black", marginLeft: 10, position: "relative"}} numberOfLines={2}>{item.eventDescription}</Text>
                             </TouchableOpacity>
                         </View>                        
