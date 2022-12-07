@@ -28,7 +28,7 @@
           }
         }
       },
-      "ios.config.googleMapsApiKey": "AIzaSyA8QvACOc7ifFR1MOSJ7XMSh25Z8uPbJKI"
+      "ios.config.googleMapsApiKey": ""
     },
     "android": {
       "adaptiveIcon": {
