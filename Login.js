@@ -18,7 +18,7 @@ const Login = ({navigation}) => {
             "password": input.password
         })
             .then((response) => {
-                navigation.navigate("MenuNav", {accountID: response.data.id})
+                navigation.navigate("MenuNav", {username: response.data.username})
             })
             .catch((e) => {console.log(e); Alert.alert("Email or Password is incorrect")});
     }

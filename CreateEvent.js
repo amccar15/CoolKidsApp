@@ -6,7 +6,7 @@ import styles from './components/Styles.js';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import axios from "axios";
 
-const CreateEvent = ({ route, navigation }) => {
+const CreateEvent = ({ navigation }) => {
 
     //creating hooks for user input
     const [input, setInput] = useState({
