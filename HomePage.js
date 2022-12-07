@@ -1,17 +1,14 @@
 import React, {useState, useEffect} from "react";
-import { Text, View, ScrollView, Image, Alert,TouchableOpacity, FlatList } from "react-native";
+import { Text, View, ScrollView, Image, Alert,TouchableOpacity, FlatList, Linking } from "react-native";
 import { IconButton } from "react-native-paper";
 import styles from './components/Styles.js';
 import axios from "axios";
 
-const HomePage = ({route, navigation}) => {
+const HomePage = ({navigation}) => {
 
     const config = {
         method: 'get',
         url: 'http://192.168.1.117:8080/api/v1/events',
-        headers: {
-            Authorization: "Bearer " + route.params.userToken
-        }
     }
 
     useEffect(() => {
@@ -21,7 +18,7 @@ const HomePage = ({route, navigation}) => {
                 .catch((e) => console.log(e));
         }
         getUpcomingEvents();
-    })
+    }, [])
 
     const [UpcomingEvents, setUpcomingEvents] = useState([]);
 
@@ -66,14 +63,14 @@ const HomePage = ({route, navigation}) => {
                     data={UpcomingEvents}
                     renderItem={({ item }) => {return ( 
                         <View style={styles.upcomingEventIcon}>
-                            <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.id, userToken: route.params.userToken})}>
-                                <Image source={require('./CoolKidsLogo.png')} style={{height: "50%", width: "95%", marginBottom: 10, marginLeft: 10, position: 'relative'}}/>
+                            <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.event_url})}>
+                                <Image source={{uri: item.eventPhotoUrl}} style={{height: "50%", width: "95%", marginBottom: 10, marginLeft: 10, position: 'relative'}}/>
                                 <Text style={{fontSize: 20, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventTitle}</Text>
-                                <Text style={{fontSize: 14, color: "black", marginLeft: 10, position: "relative"}} numberOfLines={2}>{item.eventDescription}</Text>
+                                <Text style={{fontSize: 14, color: "black", marginLeft: 10, position: "relative"}} numberOfLines={1}>{item.eventDescription}</Text>
                             </TouchableOpacity>
                         </View>                        
                     )}}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item) => item.event_url}
                 />
             </View>
         </View>

@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, FlatList, Image, TouchableOpacity, Alert } from 'react-native';
+import { Text, View, FlatList, Image, TouchableOpacity, Linking } from 'react-native';
 import { IconButton } from "react-native-paper";
 import styles from './components/Styles.js';
 import axios from "axios";
 
-const EventsPage = ({route, navigation}) => {
+const EventsPage = ({navigation}) => {
 
     const [eventData, setEventData] = useState([]);
 
     const config = {
         method: 'get',
-        url: 'http://192.168.1.117:8080/api/v1/events',
-        headers: {
-            Authorization: "Bearer " + route.params.userToken
-        }
+        url: 'http://192.168.1.117:8080/api/v1/events'
     }
 
     useEffect(() => {
@@ -27,6 +24,22 @@ const EventsPage = ({route, navigation}) => {
         GetEvents();
     }, []);
 
+
+    const createMapLink = (addressStr, mapProvider) => {
+        if (mapProvider === 'apple') {
+            return `http://maps.apple.com/?q=${addressStr}`;
+        }
+        return `https://www.google.com/maps/search/?api=1&query=${addressStr}`;
+    };
+
+    const openNavigationApp = (addressStr) => {
+        const mapProvider = (Platform.OS === 'ios') ? 'apple' : 'google';
+        const mapLink = createMapLink(addressStr, mapProvider);
+
+        Linking.openURL(mapLink)
+            .catch(err => console.error('An error occurred', err));
+    };
+
     return (
         <View>
             <View style={styles.UpperHome}>
@@ -37,21 +50,32 @@ const EventsPage = ({route, navigation}) => {
             <View style={styles.lowerHome}>
                 <View style={styles.eventContainer}>
                     <FlatList
+                        style={{height: "100%", display: "flex", flexDirection: 'column'}}
                         data={eventData}
                         renderItem={({ item }) => {return ( 
                             <View style={styles.eventDisplay}>
-                                <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.id, userToken: route.params.userToken})}>
-                                    <Image source={require('./CoolKidsLogo.png')} style={{height: "50%", width: "95%", margin: 10, position: 'relative'}}/>
-                                    <Text style={{fontSize: 32, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventTitle}</Text>
+                                <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.event_url})}>
+                                    <Image source={{uri: item.eventPhotoUrl}} style={{height: "50%", width: "95%", margin: 10, position: 'relative'}}/>
+                                    <Text style={{fontSize: 19, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventTitle}</Text>
                                     <Text style={{fontSize: 14, color: "black", marginLeft: 10, position: "relative"}} numberOfLines={2}>{item.eventDescription}</Text>
-                                    <TouchableOpacity style={{backgroundColor: "#3B48AF", borderRadius: 10, height: 30, width: 75, marginLeft: 10, top: "12%"}}>
+                                    <View style={{display: 'flex', flexDirection: 'row', padding: 10, justifyContent: 'space-between'}}>
+                                    <TouchableOpacity style={{backgroundColor: "#3B48AF", borderRadius: 10, height: 30, width: 75}}>
                                         <Text style={{fontSize: 20,color: "white", alignSelf: "center", margin: 3}}>RSVP</Text>
                                     </TouchableOpacity>
-                                    <IconButton icon="map-marker" iconColor="#FFFFFF" style={{backgroundColor: "#3B48AF", borderRadius: 10, height: 30, width: 75, marginRight: 10, alignSelf: 'flex-end'}}></IconButton>
+                                    <IconButton icon="map-marker" iconColor="#FFFFFF" style={{
+                                        backgroundColor: "#3B48AF", 
+                                        borderRadius: 10, 
+                                        height: 30, 
+                                        width: 75,
+                                        top: -6 
+                                        }}
+                                        onPress={() => openNavigationApp(item.eventAddress)}
+                                    ></IconButton>
+                                    </View>
                                 </TouchableOpacity>
                             </View>
                         )}}
-                        keyExtractor={(item) => item.id}
+                        keyExtractor={(item) => item.event_url}
                     />
                 </View>
             </View>

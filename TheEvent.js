@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, Platform, Linking } from 'react-native';
 import { IconButton } from 'react-native-paper';
+import openMap from 'react-native-open-maps';
 import axios from 'axios';
 import styles from './components/Styles.js';
 
 const TheEvent = ({route, navigation}) => {
 
     const [currentEvent, setCurrentEvent] = useState([]);
-
     const config = {
         method: 'get',
-        url: 'http://192.168.1.117:8080/api/v1/events/' + route.params.eventID,
-        headers: {
-            Authorization: "Bearer " + route.params.userToken
-        }
+        url: 'http://192.168.1.117:8080' + route.params.eventID,
     }
 
     useEffect(() => {
@@ -21,7 +18,6 @@ const TheEvent = ({route, navigation}) => {
             await axios(config)
                 .then((response) => {
                     setCurrentEvent(response.data);
-                    console.log(response.data);
                 })
                 .catch(error => console.log(error));
         }
@@ -34,25 +30,56 @@ const TheEvent = ({route, navigation}) => {
         </TouchableOpacity>
     );
 
+    const createMapLink = (addressStr, mapProvider) => {
+        if (mapProvider === 'apple') {
+            return `http://maps.apple.com/?q=${addressStr}`;
+        }
+        return `https://www.google.com/maps/search/?api=1&query=${addressStr}`;
+    };
+
+    const openNavigationApp = (addressStr) => {
+        const mapProvider = (Platform.OS === 'ios') ? 'apple' : 'google';
+        const mapLink = createMapLink(addressStr, mapProvider);
+
+        Linking.openURL(mapLink)
+            .catch(err => console.error('An error occurred', err));
+    };
+
     return (
         <View>
             
             <View style={styles.UpperHome}>
                 <IconButton icon="bell" iconColor="#FFFFFF" style={styles.notifcationBell} onPress={() => navigation.navigate("NotificationTab")}></IconButton>
                 <IconButton icon="account" style={styles.userPhoto}></IconButton>
-                <Text style={styles.UpperHomeText}>{currentEvent.eventType}</Text>
+                <Text style={{fontSize: 25, color: "white", fontWeight: "bold", alignSelf: "center", textTransform: "uppercase", position: 'relative', paddingTop: 5}} numberOfLines={1}>{currentEvent.eventTitle}</Text>
             </View>
             <View style={styles.lowerHome}>
-                <ScrollView>
-                    <View style={{flex: 1, height: 1000}}>
-                        <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
+                <ScrollView style={{borderRadius: 10}}>
+                    <View style={{flex: 1, height: 1500}}>
+
+                        <Image source={{uri: currentEvent.eventPhotoUrl}} style={styles.image}/>
                         <RSVPButton title="RSVP For the Event" size='lg'/>
-                        <Text>{currentEvent.eventStartDateTime} to {currentEvent.eventEndDateTime}</Text>
-                        <Text>Location: {currentEvent.eventAddress}</Text>
+
+                        <View style={{margin: 10, padding: 10, backgroundColor: '#90ED65', borderRadius: 10}}>
+                            <Text style={{fontSize: 20, fontFamily: 'ArialRoundedMTBold'}}>{currentEvent.eventStartDateTime}</Text>
+                        </View>
+
+                        <TouchableOpacity onPress={() => openNavigationApp(currentEvent.eventAddress)} style={{margin: 10, padding: 5, backgroundColor: '#90ED65', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+                            <Text style={{fontFamily: 'ArialRoundedMTBold', top: 10, width: "80%"}}>Location: {currentEvent.eventAddress}</Text>
+                            <IconButton icon="map-marker" iconColor="#FFFFFF" style={{
+                                        backgroundColor: "#3B48AF", 
+                                        borderRadius: 10, 
+                                        height: 30, 
+                                        width: 60,
+                                    }}></IconButton>
+                        </TouchableOpacity>
+
                         <Text style={{fontFamily: 'ArialRoundedMTBold', fontSize: 25, marginLeft: 10, padding: 10}}>Going: {currentEvent.currentRSVPS} / {currentEvent.maxAttendance}</Text>
+
                         <View style={{margin: 10, borderStyle: "solid", borderColor: "black", borderWidth: 1, height: 200}}>
                             <Text style={{marginLeft: 10}}>{currentEvent.eventDescription}</Text>
                         </View>
+
                         <Text style={{marginLeft: 10, fontSize: 20, fontWeight: "bold"}}>Contact Info: </Text>
                         <Text style={{marginLeft: 25}}>{currentEvent.contactPersonName}</Text>
                         <Text style={{marginLeft: 25}}>{currentEvent.contactPersonPhoneNumber}</Text>

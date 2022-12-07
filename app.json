@@ -27,7 +27,8 @@
             "NSIncludesSubdomains": true
           }
         }
-      }
+      },
+      "ios.config.googleMapsApiKey": "AIzaSyA8QvACOc7ifFR1MOSJ7XMSh25Z8uPbJKI"
     },
     "android": {
       "adaptiveIcon": {

@@ -4,14 +4,6 @@ const deviceWidth = Dimensions.get('window').width;
 const deviceHieght = Dimensions.get('window').height;
 
 export default StyleSheet.create({
-    UpperHomeText: {
-        fontSize: 30,
-        top: 80,
-        color: "#FFFFFF",
-        fontWeight: "bold",
-        alignSelf: "center",
-        textTransform: "uppercase",
-    },
     UpperHome: {
         height: 200,
         width: deviceWidth,
@@ -23,8 +15,15 @@ export default StyleSheet.create({
         alignSelf: "center",
         borderRadius: 20,
         backgroundColor: "#FFFFFF",
-        position: 'absolute',
-        top: 50,
+        position: 'relative',
+    },
+    UpperHomeText: {
+        fontSize: 30,
+        color: "white",
+        fontWeight: "bold",
+        alignSelf: "center",
+        textTransform: "uppercase",
+        position: 'relative'
     },
     notifcationBell: {
         width: 40,
@@ -130,7 +129,8 @@ export default StyleSheet.create({
         color: "black",
         fontSize: 30,
         alignSelf: 'center',
-        position: 'relative'
+        position: 'relative',
+        fontFamily: 'ArialRoundedMTBold'
     },
     image: {
         alignContent: 'center',

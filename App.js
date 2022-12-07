@@ -35,7 +35,7 @@ const MenuNav = ({route}) => {
           {title: "Home", drawerIcon: ({color}) => (<IconButton icon="home" iconColor={color}/>)}
         }
         initialParams={
-          {userID: route.params.accountID, userToken: route.params.accountToken}
+          {userID: route.params.accountID}
         }
       />
       <Drawer.Screen name='Events' component={eventsPage} 
@@ -43,7 +43,7 @@ const MenuNav = ({route}) => {
           {title: "Events", drawerIcon: ({color}) => (<IconButton icon="account-group" iconColor={color}/>)}
         }
         initialParams={
-          {userID: route.params.accountID, userToken: route.params.accountToken}
+          {userID: route.params.accountID}
         }
       />
       <Drawer.Screen name='Settings' component={Settings} 
@@ -51,7 +51,7 @@ const MenuNav = ({route}) => {
           {title: "Profile", drawerIcon: ({color}) => (<IconButton icon="account" iconColor={color}/>)}
         } 
         initialParams={
-          {userID: route.params.accountID, userToken: route.params.accountToken}
+          {userID: route.params.accountID}
         }
       />
       <Drawer.Screen name='CreateEvent' component={CreateEvent} 
@@ -59,7 +59,7 @@ const MenuNav = ({route}) => {
           {title: "Create an Event", drawerIcon: ({color}) => (<IconButton icon="pencil" iconColor={color}/>)}
         } 
         initialParams={
-          {userID: route.params.accountID, userToken: route.params.accountToken}
+          {userID: route.params.accountID}
         }
       />
     </Drawer.Navigator>
@@ -84,7 +84,7 @@ const App = () => {
             name='MenuNav'
             component={MenuNav}
             options={{ headerShown: false}}
-            initialParams={{accountID: "", accountToken: ""}}
+            initialParams={{accountID: ""}}
           />
           <Stack.Screen 
             name='NotificationTab'
