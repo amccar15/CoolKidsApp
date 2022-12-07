@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, Platform, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView, Platform, Linking, Alert } from 'react-native';
 import { IconButton } from 'react-native-paper';
-import openMap from 'react-native-open-maps';
 import axios from 'axios';
 import styles from './components/Styles.js';
 
@@ -24,11 +23,13 @@ const TheEvent = ({route, navigation}) => {
         getEventById();
     }, []);
 
-    const RSVPButton = ({title}) => (
-        <TouchableOpacity style={styles.RSVPButton}>
-            <Text style={styles.RSVPText}>{title}</Text>
-        </TouchableOpacity>
-    );
+    const RSVP = async () => {
+        await axios.post('http://192.168.1.117:8080/api/test/addEvent', (
+            currentEvent.eventTitle
+        ))
+            .then((response) => Alert.alert(response.data))
+            .catch((e) => {Alert.alert("Could not register you for the event"); console.log(e)});
+    }
 
     const createMapLink = (addressStr, mapProvider) => {
         if (mapProvider === 'apple') {
@@ -58,7 +59,10 @@ const TheEvent = ({route, navigation}) => {
                     <View style={{flex: 1, height: 1500}}>
 
                         <Image source={{uri: currentEvent.eventPhotoUrl}} style={styles.image}/>
-                        <RSVPButton title="RSVP For the Event" size='lg'/>
+
+                        <TouchableOpacity style={styles.RSVPButton} onPress={() => RSVP()}>
+                            <Text style={styles.RSVPText}>RSVP For the Event</Text>
+                        </TouchableOpacity>
 
                         <View style={{margin: 10, padding: 10, backgroundColor: '#90ED65', borderRadius: 10}}>
                             <Text style={{fontSize: 20, fontFamily: 'ArialRoundedMTBold'}}>{currentEvent.eventStartDateTime}</Text>

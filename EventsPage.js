@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, FlatList, Image, TouchableOpacity, Linking } from 'react-native';
+import { Text, View, FlatList, Image, TouchableOpacity, Linking, Alert } from 'react-native';
 import { IconButton } from "react-native-paper";
 import styles from './components/Styles.js';
 import axios from "axios";
@@ -24,6 +24,13 @@ const EventsPage = ({navigation}) => {
         GetEvents();
     }, []);
 
+    const RSVP = async (title) => {
+        await axios.post('http://192.168.1.117:8080/api/test/addEvent', (
+            `${title}`
+        ))
+            .then((response) => Alert.alert(response.data))
+            .catch((e) => {Alert.alert("Could not register you for the event"); console.log(e)});
+    }
 
     const createMapLink = (addressStr, mapProvider) => {
         if (mapProvider === 'apple') {
@@ -56,10 +63,14 @@ const EventsPage = ({navigation}) => {
                             <View style={styles.eventDisplay}>
                                 <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.event_url})}>
                                     <Image source={{uri: item.eventPhotoUrl}} style={{height: "50%", width: "95%", margin: 10, position: 'relative'}}/>
+
                                     <Text style={{fontSize: 19, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventTitle}</Text>
+
                                     <Text style={{fontSize: 14, color: "black", marginLeft: 10, position: "relative"}} numberOfLines={2}>{item.eventDescription}</Text>
+
                                     <View style={{display: 'flex', flexDirection: 'row', padding: 10, justifyContent: 'space-between'}}>
-                                    <TouchableOpacity style={{backgroundColor: "#3B48AF", borderRadius: 10, height: 30, width: 75}}>
+
+                                    <TouchableOpacity style={{backgroundColor: "#3B48AF", borderRadius: 10, height: 30, width: 75}} onPress={() => RSVP(item.eventTitle)}>
                                         <Text style={{fontSize: 20,color: "white", alignSelf: "center", margin: 3}}>RSVP</Text>
                                     </TouchableOpacity>
                                     <IconButton icon="map-marker" iconColor="#FFFFFF" style={{
@@ -71,6 +82,7 @@ const EventsPage = ({navigation}) => {
                                         }}
                                         onPress={() => openNavigationApp(item.eventAddress)}
                                     ></IconButton>
+
                                     </View>
                                 </TouchableOpacity>
                             </View>
