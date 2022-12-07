@@ -19,8 +19,8 @@ const Stack = createNativeStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
-const signOutUser = async () => {
-  await axios.post('http://192.168.1.117:8080/api/auth/signout').then((response) => console.log(response.data))
+const signOutUser = async (usr) => {
+  await axios.post('http://192.168.1.117:8080/api/auth/signout', {username: usr}).then((response) => console.log(response.data))
     .catch((e) => console.log(e));
 }
 
@@ -29,7 +29,7 @@ function CustomDrawerContent(props) {
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props}/>
         <SafeAreaView>
-          <DrawerItem label="Logout" onPress={() => {props.navigation.popToTop(); signOutUser()}}/>
+          <DrawerItem label="Logout" onPress={() => {props.navigation.popToTop(); signOutUser(props.username)}}/>
         </SafeAreaView>
     </DrawerContentScrollView>
   );
