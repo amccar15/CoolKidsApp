@@ -4,6 +4,7 @@ import { IconButton } from 'react-native-paper';
 import { ip } from './global.js';
 import axios from 'axios';
 import styles from './components/Styles.js';
+import * as Calendar from 'expo-calendar';
 
 const TheEvent = ({route, navigation}) => {
 
@@ -24,6 +25,20 @@ const TheEvent = ({route, navigation}) => {
         getEventById();
     }, []);
 
+    // ask for permission to use device calendar, necessary to read and write.
+    useEffect(() => {
+        (async () => {
+          const { status } = await Calendar.requestCalendarPermissionsAsync();
+          if (status === 'granted') {
+            const calendars = await Calendar.getCalendarsAsync(
+              Calendar.EntityTypes.EVENT
+            );
+            //console.log('Here are all your calendars:');
+            //console.log({ calendars });
+          }
+        })();
+      }, []);
+
     const RSVP = async () => {
         await axios.post(`http://${ip}:8080/api/test/addEvent`, (
             currentEvent.eventTitle
@@ -31,6 +46,39 @@ const TheEvent = ({route, navigation}) => {
             .then((response) => Alert.alert(response.data))
             .catch((e) => {Alert.alert("Could not register you for the event"); console.log(e)});
     }
+
+    //function needs permissions to work, otherwise will fail
+    const addEventToDeviceCalendar = async () => {
+        try{
+            //Test Dates
+            //const newDateId = new Date("DEC 11 2022, 7:00:00");
+            //const newEndDate = new Date("DEC 11 2022, 10:00:00");
+            //If using string format must follow:
+            //startDate - UTC, format: 'YYYY-MM-DDTHH:mm:ss.SSSZ' PS. UTC is 5 hours behind EST time adjust accordingly with moment
+            //endDate - UTC, format: 'YYYY-MM-DDTHH:mm:ss.SSSZ'
+
+
+
+            //TODO use moment to convert strings to proper times
+            const res = await Calendar.createEventAsync("1", {
+      
+                //TEST DATES HARDCODED
+                //startDate: "2022-12-10T03:00:00.000Z",
+                //startDate: newDateId,
+                //endDate: newEndDate,
+                //title: 'Breakfast with Santa Fundraiser' ,
+                startDate: currentEvent.eventStartDateTime,
+                endDate: currentEvent.eventEndDateTime,
+                title: currentEvent.eventTitle
+        });
+        Calendar.openEventInCalendar(res);
+        } catch (e) {
+            console.log(e);
+        }
+
+
+    }
+
 
     const createMapLink = (addressStr, mapProvider) => {
         if (mapProvider === 'apple') {
@@ -63,6 +111,10 @@ const TheEvent = ({route, navigation}) => {
 
                         <TouchableOpacity style={styles.RSVPButton} onPress={() => RSVP()}>
                             <Text style={styles.RSVPText}>RSVP For the Event</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.RSVPButton} onPress={() => addEventToDeviceCalendar()}>
+                            <Text style={styles.RSVPText}>Add to your Calendar</Text>
                         </TouchableOpacity>
 
                         <View style={{margin: 10, padding: 10, backgroundColor: '#90ED65', borderRadius: 10}}>
