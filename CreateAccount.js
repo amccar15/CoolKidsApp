@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Dimensions, KeyboardAvoidingView, Alert } from "react-native";
+import { ip } from './global.js';
 import axios from "axios";
 
 const deviceWidth = Dimensions.get('window').width;
@@ -58,7 +59,7 @@ const CreateAccount = ({navigation}) => {
 
     const config = {
         method: 'post',
-        url: 'http://172.16.254.136:8080/api/auth/signup',
+        url: `http://${ip}:8080/api/auth/signup`,
         data : {
             "username": input.username,
             "firstName": input.firstName,

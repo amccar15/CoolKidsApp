@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
-import Login from './Login.js'
+import { ip } from './global.js';
+import Login from './Login.js';
 import createAccount from './CreateAccount.js';
 import homePage from './HomePage.js';
 import eventsPage from './EventsPage.js';
@@ -21,7 +22,7 @@ const Drawer = createDrawerNavigator();
 const RightDrawer = createDrawerNavigator();
 
 const signOutUser = async (usr) => {
-  await axios.post('http://172.16.254.136:8080/api/auth/signout', {username: usr}).then((response) => console.log(response.data))
+  await axios.post(`http://${ip}:8080/api/auth/signout`, {username: usr}).then((response) => console.log(response.data))
     .catch((e) => console.log(e));
 }
 

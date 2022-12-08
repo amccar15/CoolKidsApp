@@ -4,6 +4,7 @@ import { IconButton } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import styles from './components/Styles.js';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { ip } from './global.js';
 import axios from "axios";
 
 const CreateEvent = ({ navigation }) => {
@@ -86,7 +87,7 @@ const CreateEvent = ({ navigation }) => {
     const createEvent = async () => {
         getEventCreator();
         axios.post(
-            "http://172.16.254.143:8080/api/v1/events/new",
+            `http://${ip}:8080/api/v1/events/new`,
             {
                 "maxAttendance": input.capacity,
                 "eventType": input.title,

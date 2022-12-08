@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, FlatList, Image, TouchableOpacity, Linking, Alert } from 'react-native';
 import { IconButton } from "react-native-paper";
+import { ip } from './global.js';
 import styles from './components/Styles.js';
 import axios from "axios";
 
@@ -10,7 +11,7 @@ const EventsPage = ({navigation}) => {
 
     const config = {
         method: 'get',
-        url: 'http://172.16.254.136:8080/api/v1/events'
+        url: `http://${ip}:8080/api/v1/events`
     }
 
     useEffect(() => {

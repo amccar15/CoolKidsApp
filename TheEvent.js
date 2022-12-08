@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView, Platform, Linking, Alert } from 'react-native';
 import { IconButton } from 'react-native-paper';
+import { ip } from './global.js';
 import axios from 'axios';
 import styles from './components/Styles.js';
 
@@ -9,7 +10,7 @@ const TheEvent = ({route, navigation}) => {
     const [currentEvent, setCurrentEvent] = useState([]);
     const config = {
         method: 'get',
-        url: 'http://172.16.254.136:8080' + route.params.eventID,
+        url: `http://${ip}:8080` + route.params.eventID,
     }
 
     useEffect(() => {
@@ -24,7 +25,7 @@ const TheEvent = ({route, navigation}) => {
     }, []);
 
     const RSVP = async () => {
-        await axios.post('http://192.168.1.117:8080/api/test/addEvent', (
+        await axios.post(`http://${ip}:8080/api/test/addEvent`, (
             currentEvent.eventTitle
         ))
             .then((response) => Alert.alert(response.data))

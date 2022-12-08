@@ -1,5 +1,6 @@
 import { StyleSheet, TextInput, Text, View, TouchableOpacity, Image, Dimensions, ScrollView, StatusBar, Alert } from 'react-native';
 import React, { useState } from 'react';
+import { ip } from './global.js';
 import axios from 'axios';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -13,7 +14,7 @@ const Login = ({navigation}) => {
     });
     
     const loginInfo = async () => {
-        await axios.post("http://172.16.254.136:8080/api/auth/signin", {
+        await axios.post(`http:/${ip}:8080/api/auth/signin`, {
             "username": input.username,
             "password": input.password
         })
