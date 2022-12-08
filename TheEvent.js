@@ -3,6 +3,8 @@ import { View, Text, Button, TouchableOpacity, Image, ScrollView } from 'react-n
 import { IconButton } from 'react-native-paper';
 import axios from 'axios';
 import styles from './components/Styles.js';
+import * as Calendar from 'expo-calendar';
+
 
 const TheEvent = ({route, navigation}) => {
 
@@ -15,6 +17,20 @@ const TheEvent = ({route, navigation}) => {
             Authorization: "Bearer " + route.params.userToken
         }
     }
+
+// ask for permission to use device calendar
+    useEffect(() => {
+        (async () => {
+          const { status } = await Calendar.requestCalendarPermissionsAsync();
+          if (status === 'granted') {
+            const calendars = await Calendar.getCalendarsAsync(
+              Calendar.EntityTypes.EVENT
+            );
+            console.log('Here are all your calendars:');
+            console.log({ calendars });
+          }
+        })();
+      }, []);
 
     useEffect(() => {
         const getEventById = async () => {
@@ -34,6 +50,41 @@ const TheEvent = ({route, navigation}) => {
         </TouchableOpacity>
     );
 
+    const AddToCalenderBtn = ({title}) => (
+        <TouchableOpacity style={styles.RSVPButton} onPress={addEventToDeviceCalendar}>
+            <Text style={styles.RSVPText}>{title}</Text>
+        </TouchableOpacity>
+    );
+    const AddToDeviceCalendarButton = () =>{
+        <Button style= {styles.RSVPButton} onPress = {addEventToDeviceCalendar}>
+            <Text>Add to Calendar</Text>
+        </Button>
+    }
+
+    const addEventToDeviceCalendar = async () => {
+        try{
+            //Test Dates
+            const newDateId = new Date("DEC 11 2022, 7:00:00");
+            const newEndDate = new Date("DEC 11 2022, 10:00:00");
+            //startDate - UTC, format: 'YYYY-MM-DDTHH:mm:ss.SSSZ'
+            //endDate - UTC, format: 'YYYY-MM-DDTHH:mm:ss.SSSZ'
+
+            //TODO use moment to convert strings to proper times
+            const res = await Calendar.createEventAsync("1", {
+      
+        
+                //startDate: "2022-12-10T03:00:00.000Z",
+                startDate: newDateId,
+                endDate: newEndDate,
+                //title: 'Breakfast with Santa Fundraiser' ,
+                title: currentEvent.eventTitle
+        });
+        Calendar.openEventInCalendar(res);
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     return (
         <View>
             
@@ -47,6 +98,7 @@ const TheEvent = ({route, navigation}) => {
                     <View style={{flex: 1, height: 1000}}>
                         <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
                         <RSVPButton title="RSVP For the Event" size='lg'/>
+                        <AddToCalenderBtn title="Add to calendar" size = 'lg'/>
                         <Text>{currentEvent.eventStartDateTime} to {currentEvent.eventEndDateTime}</Text>
                         <Text>Location: {currentEvent.eventAddress}</Text>
                         <Text style={{fontFamily: 'ArialRoundedMTBold', fontSize: 25, marginLeft: 10, padding: 10}}>Going: {currentEvent.currentRSVPS} / {currentEvent.maxAttendance}</Text>
