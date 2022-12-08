@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
@@ -13,14 +13,15 @@ import CreateEvent from './CreateEvent.js';
 import { IconButton } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
-import { Alert } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
 const Drawer = createDrawerNavigator();
 
+const RightDrawer = createDrawerNavigator();
+
 const signOutUser = async (usr) => {
-  await axios.post('http://192.168.1.117:8080/api/auth/signout', {username: usr}).then((response) => console.log(response.data))
+  await axios.post('http://172.16.254.136:8080/api/auth/signout', {username: usr}).then((response) => console.log(response.data))
     .catch((e) => console.log(e));
 }
 
@@ -29,13 +30,20 @@ function CustomDrawerContent(props) {
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props}/>
         <SafeAreaView>
-          <DrawerItem label="Logout" onPress={() => {props.navigation.popToTop(); signOutUser(props.username)}}/>
+          <DrawerItem label="Logout" onPress={() => {props.navigation.popToTop(); signOutUser(props.username)}}
+            icon={({ color }) => (
+              <IconButton icon='logout' iconColor={color} />
+            )}
+            labelStyle={{marginLeft: 10, fontFamily: 'ArialRoundedMTBold', fontSize: 15}}
+            inactiveTintColor="#333"
+          />
         </SafeAreaView>
     </DrawerContentScrollView>
   );
 }
 
-const MenuNav = ({route}) => {
+const LeftMenuNav = ({route}) => {
+  const ROLE = route.params.role
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -47,8 +55,10 @@ const MenuNav = ({route}) => {
           fontFamily: 'ArialRoundedMTBold',
           fontSize: 15,
         },
+        drawerPosition: 'left',
       }}
-      drawerContent={props => <CustomDrawerContent {...props} />}
+      initialRouteName="HomePage"
+      drawerContent={props => <CustomDrawerContent {...props}/>}
     >
       <Drawer.Screen name='HomePage' component={homePage} 
         options={
@@ -65,13 +75,26 @@ const MenuNav = ({route}) => {
           {title: "Profile", drawerIcon: ({color}) => (<IconButton icon="account" iconColor={color}/>)}
         } 
       />
-      <Drawer.Screen name='CreateEvent' component={CreateEvent} 
-        options={
-          {title: "Create an Event", drawerIcon: ({color}) => (<IconButton icon="pencil" iconColor={color}/>)}
-        } 
-      />
+      {ROLE == "ADMIN" &&
+        <Drawer.Screen name='CreateEvent' component={CreateEvent} 
+          options={
+            {title: "Create an Event", drawerIcon: ({color}) => (<IconButton icon="pencil" iconColor={color}/>)}
+          } 
+        />
+      }
     </Drawer.Navigator>
   );
+}
+
+const RightMenu = ({route}) => {
+  <RightDrawer.Navigator
+    screenOptions={{
+      drawerPosition: 'right',
+      headerShown: false,
+    }}
+  >
+    <RightDrawer.Screen name='HomeDrawer' component={LeftMenuNav}/>
+  </RightDrawer.Navigator>
 }
 
 const App = () => {
@@ -89,10 +112,10 @@ const App = () => {
             options={{title: "Create Account"}}
           />
           <Stack.Screen 
-            name='MenuNav'
-            component={MenuNav}
+            name='LeftMenuNav'
+            component={LeftMenuNav}
             options={{ headerShown: false}}
-            initialParams={{username: ""}}
+            initialParams={{username: "", role: ""}}
           />
           <Stack.Screen 
             name='NotificationTab'

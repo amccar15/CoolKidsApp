@@ -48,8 +48,8 @@ const CreateAccount = ({navigation}) => {
         else if(input.firstName === "" || input.lastName === "") {
             Alert.alert("Need input for both First and Last name");
         }
-        else if(!(input.role === 'admin' || input.role === 'user')) {
-            Alert.alert("no");
+        else if(!(input.role === 'ADMIN' || input.role === 'USER')) {
+            Alert.alert("Not a Valid Referral code");
         }
         else {
             registerUser();
@@ -58,7 +58,7 @@ const CreateAccount = ({navigation}) => {
 
     const config = {
         method: 'post',
-        url: 'http://192.168.1.117:8080/api/auth/signup',
+        url: 'http://172.16.254.136:8080/api/auth/signup',
         data : {
             "username": input.username,
             "firstName": input.firstName,

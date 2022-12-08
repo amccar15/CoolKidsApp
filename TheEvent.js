@@ -9,7 +9,7 @@ const TheEvent = ({route, navigation}) => {
     const [currentEvent, setCurrentEvent] = useState([]);
     const config = {
         method: 'get',
-        url: 'http://192.168.1.117:8080' + route.params.eventID,
+        url: 'http://172.16.254.136:8080' + route.params.eventID,
     }
 
     useEffect(() => {

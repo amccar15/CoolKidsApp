@@ -13,12 +13,13 @@ const Login = ({navigation}) => {
     });
     
     const loginInfo = async () => {
-        await axios.post("http://192.168.1.117:8080/api/auth/signin", {
+        await axios.post("http://172.16.254.136:8080/api/auth/signin", {
             "username": input.username,
             "password": input.password
         })
             .then((response) => {
-                navigation.navigate("MenuNav", {username: response.data.username})
+                navigation.navigate("LeftMenuNav", {username: response.data.username, role: response.data.roles});
+                console.log(response.data.roles[0]);
             })
             .catch((e) => {console.log(e); Alert.alert("Email or Password is incorrect")});
     }

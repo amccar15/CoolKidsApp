@@ -10,7 +10,7 @@ const EventsPage = ({navigation}) => {
 
     const config = {
         method: 'get',
-        url: 'http://192.168.1.117:8080/api/v1/events'
+        url: 'http://172.16.254.136:8080/api/v1/events'
     }
 
     useEffect(() => {
@@ -25,7 +25,7 @@ const EventsPage = ({navigation}) => {
     }, []);
 
     const RSVP = async (title) => {
-        await axios.post('http://192.168.1.117:8080/api/test/addEvent', (
+        await axios.post('http://172.16.254.136:8080/api/test/addEvent', (
             `${title}`
         ))
             .then((response) => Alert.alert(response.data))
