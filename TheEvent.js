@@ -69,14 +69,18 @@ const TheEvent = ({route, navigation}) => {
             //startDate - UTC, format: 'YYYY-MM-DDTHH:mm:ss.SSSZ'
             //endDate - UTC, format: 'YYYY-MM-DDTHH:mm:ss.SSSZ'
 
+
+
             //TODO use moment to convert strings to proper times
             const res = await Calendar.createEventAsync("1", {
       
         
                 //startDate: "2022-12-10T03:00:00.000Z",
-                startDate: newDateId,
-                endDate: newEndDate,
+                //startDate: newDateId,
+                //endDate: newEndDate,
                 //title: 'Breakfast with Santa Fundraiser' ,
+                startDate: currentEvent.eventStartDateTime,
+                endDate: currentEvent.eventEndDateTime,
                 title: currentEvent.eventTitle
         });
         Calendar.openEventInCalendar(res);
