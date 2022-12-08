@@ -1,50 +1,61 @@
 import React, { useState, useEffect } from "react";
 import {Text, View, StyleSheet, ScrollView, TouchableOpacity, TextInput} from 'react-native';
 import { IconButton } from "react-native-paper";
+import { ip } from './global.js';
 import styles from './components/Styles.js';
 import axios from "axios";
 
-const Settings = ({route, navigation}) => {
+const Settings = ({navigation}) => {
 
     useEffect(() => {
         const getProfileInfo = async () => {
-            axios.get('http://172.16.254.143:8080/api/v1/users/id/' + route.params.userID)
+            axios.get(`http://${ip}:8080/api/test/user`)
                         .then((response) => {
-                            setUserInfo(prevState => {return {...prevState, username: response.data.firstName + " " + response.data.lastName}});
-                            setUserInfo(prevState => {return {...prevState, userTitle: response.data.userRole}});
+                            setUserInfo(prevState => {return {...prevState, username: response.data.username}});
+                            setUserInfo(prevState => {return {...prevState, userRole: response.data.roles}});
                         })
                         .catch((e) => console.log(e));
         }
         getProfileInfo();
     }, []);
 
-    const UpdateAccountButton = ({title}) => (
-        <TouchableOpacity style={styles.EventButton}>
-            <Text style={styles.buttonText}>{title}</Text>
-        </TouchableOpacity>
-    );
-
     const [userInfo, setUserInfo] = useState({
         username: "",
-        userTitle: "",
+        userRole: [""],
         email: "",
         phoneNumber: "",
         password: "",
         personalDesc: ""
-    })
+    });
+
+    const [updateInfo, setUpdateInfo] = useState(false);
 
     return(
         <View>
             <View style={styles.UpperHome}>
                 <IconButton icon="bell" iconColor="#FFFFFF" style={styles.notifcationBell} onPress={() => navigation.navigate("NotificationTab")}></IconButton>
-                <IconButton icon="account" style={styles.userPhoto}></IconButton>
-                <Text style={settingStyle.usernameText}>{userInfo.username}</Text>
-                <Text style={settingStyle.userTitleText}>{userInfo.userTitle}</Text>
+
+                <View style={settingStyle.topContainer}>
+                    <IconButton icon="account" style={settingStyle.userPhoto}></IconButton>
+                    <Text style={settingStyle.usernameText}>{userInfo.username}</Text>
+                </View>
+
                 <Text style={styles.UpperHomeText}>Profile</Text>
             </View>
             <View style={styles.lowerHome}>
-            <ScrollView>
-                    <Text style={{color: "white", fontSize: 30, position: 'absolute', alignSelf: 'center', top: '5%'}}>Create Account</Text>
+                {updateInfo === false && (
+                    <ScrollView>
+                        <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Current Email:</Text>
+                        <View>
+                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>{userInfo.email}</Text>
+                        </View>
+                        <TouchableOpacity style={styles.EventButton} onPress={() => setUpdateInfo(true)}>
+                            <Text style={styles.buttonText}>Change Information</Text>
+                        </TouchableOpacity>
+                    </ScrollView>
+                )}
+                {updateInfo === true && (
+                <ScrollView>
                     <TextInput
                         style={styles.inputBox}
                         value={userInfo.email}
@@ -69,31 +80,34 @@ const Settings = ({route, navigation}) => {
                         onChangeText={value => setInput(prevState => {return {...prevState, personalDesc: value}})}
                         placeholder={"Change your personal desc"}
                     />
-                    <UpdateAccountButton title={"Update Account"} size="lg"/>
+                    <TouchableOpacity style={styles.EventButton} onPress={() => setUpdateInfo(false)}>
+                        <Text style={styles.buttonText}>Update Account</Text>
+                    </TouchableOpacity>
                 </ScrollView>
+                )}
             </View>
         </View>
     );
 }
 
 const settingStyle = StyleSheet.create({
+    topContainer: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: 'center'
+    },
+    userPhoto: {
+        width: 70,
+        height: 70,
+        alignSelf: "center",
+        borderRadius: 20,
+        backgroundColor: "#FFFFFF",
+        position: 'relative',
+    },
     usernameText: {
         fontSize: 20, 
         color: "white", 
-        position: 'absolute', 
-        alignSelf: 'flex-end', 
-        top: '32%', 
-        marginRight: '15%'
     },
-    userTitleText: {
-        fontSize: 15, 
-        color: "white", 
-        position: 'absolute', 
-        alignSelf: 'flex-end', 
-        top: '40%', 
-        marginRight: '40%',
-        padding: 10,
-    }
 });
 
 export default Settings;
