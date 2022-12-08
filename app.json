@@ -27,7 +27,8 @@
             "NSIncludesSubdomains": true
           }
         }
-      }
+      },
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {

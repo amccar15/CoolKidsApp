@@ -57,8 +57,8 @@ const CreateEvent = ({ navigation }) => {
 
             console.log(result);
 
-            if(!result.cancelled) {
-                setImage(result.uri);
+            if(result.assets != null) {
+                setImage(result.assets[0].uri);
             }
         } catch(e) {
             console.log(e);

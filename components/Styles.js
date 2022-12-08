@@ -7,7 +7,7 @@ export default StyleSheet.create({
     UpperHome: {
         height: 200,
         width: deviceWidth,
-        backgroundColor: "#3B48AF",
+        backgroundColor: "#000f9f",
     },
     userPhoto: {
         width: 70,
