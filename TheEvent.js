@@ -26,18 +26,13 @@ const TheEvent = ({route, navigation}) => {
     }, []);
 
     // ask for permission to use device calendar, necessary to read and write.
-    useEffect(() => {
-        (async () => {
-          const { status } = await Calendar.requestCalendarPermissionsAsync();
-          if (status === 'granted') {
-            const calendars = await Calendar.getCalendarsAsync(
-              Calendar.EntityTypes.EVENT
-            );
-            //console.log('Here are all your calendars:');
-            //console.log({ calendars });
-          }
-        })();
-      }, []);
+    const GetCalendarPermission = async () => {
+        const { status } = await Calendar.requestCalendarPermissionsAsync();
+        if(status === 'granted') {
+            const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+            addEventToDeviceCalendar();
+        }
+    }
 
     const RSVP = async () => {
         await axios.post(`http://${ip}:8080/api/test/addEvent`, (
@@ -51,27 +46,26 @@ const TheEvent = ({route, navigation}) => {
     const addEventToDeviceCalendar = async () => {
         try{
             //Test Dates
-            //const newDateId = new Date("DEC 11 2022, 7:00:00");
-            //const newEndDate = new Date("DEC 11 2022, 10:00:00");
+            const newDateId = new Date("DEC 11 2022, 7:00:00");
+            const newEndDate = new Date("DEC 11 2022, 10:00:00");
             //If using string format must follow:
             //startDate - UTC, format: 'YYYY-MM-DDTHH:mm:ss.SSSZ' PS. UTC is 5 hours behind EST time adjust accordingly with moment
             //endDate - UTC, format: 'YYYY-MM-DDTHH:mm:ss.SSSZ'
 
 
-
             //TODO use moment to convert strings to proper times
-            const res = await Calendar.createEventAsync("1", {
+            const eventId = await Calendar.createEventAsync("1", {
       
                 //TEST DATES HARDCODED
-                //startDate: "2022-12-10T03:00:00.000Z",
-                //startDate: newDateId,
-                //endDate: newEndDate,
-                //title: 'Breakfast with Santa Fundraiser' ,
-                startDate: currentEvent.eventStartDateTime,
-                endDate: currentEvent.eventEndDateTime,
-                title: currentEvent.eventTitle
+                startDate: "2022-12-10T03:00:00.000Z",
+                startDate: newDateId,
+                endDate: newEndDate,
+                title: 'Breakfast with Santa Fundraiser' ,
+                //startDate: currentEvent.eventStartDateTime,
+                //endDate: currentEvent.eventEndDateTime,
+                //title: currentEvent.eventTitle
         });
-        Calendar.openEventInCalendar(res);
+        Calendar.openEventInCalendar(newCalenderId);
         } catch (e) {
             console.log(e);
         }
@@ -113,13 +107,20 @@ const TheEvent = ({route, navigation}) => {
                             <Text style={styles.RSVPText}>RSVP For the Event</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.RSVPButton} onPress={() => addEventToDeviceCalendar()}>
+                        <TouchableOpacity style={styles.RSVPButton} onPress={() => GetCalendarPermission()}>
                             <Text style={styles.RSVPText}>Add to your Calendar</Text>
                         </TouchableOpacity>
 
-                        <View style={{margin: 10, padding: 10, backgroundColor: '#90ED65', borderRadius: 10}}>
-                            <Text style={{fontSize: 20, fontFamily: 'ArialRoundedMTBold'}}>{currentEvent.eventStartDateTime}</Text>
-                        </View>
+                        {currentEvent.eventEndDateTime === null && (
+                            <View style={{margin: 10, padding: 10, backgroundColor: '#90ED65', borderRadius: 10}}>
+                                <Text style={{fontSize: 20, fontFamily: 'ArialRoundedMTBold'}}>{currentEvent.eventStartDateTime}</Text>
+                            </View>
+                        )}
+                        {currentEvent.eventEndDateTime != null && (
+                            <View style={{margin: 10, padding: 10, backgroundColor: '#90ED65', borderRadius: 10}}>
+                                <Text style={{fontSize: 10, fontFamily: 'ArialRoundedMTBold'}}>{currentEvent.eventStartDateTime} to {currentEvent.eventEndDateTime}</Text>
+                            </View>
+                        )}
 
                         <TouchableOpacity onPress={() => openNavigationApp(currentEvent.eventAddress)} style={{margin: 10, padding: 5, backgroundColor: '#90ED65', borderRadius: 10, display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
                             <Text style={{fontFamily: 'ArialRoundedMTBold', top: 10, width: "80%"}}>Location: {currentEvent.eventAddress}</Text>

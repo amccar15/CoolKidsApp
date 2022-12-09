@@ -28,13 +28,16 @@
           }
         }
       },
-      "googleServicesFile": "./GoogleService-Info.plist"
+      "googleServicesFile": "./GoogleService-Info.plist",
+      "NSCalendarsUsageDescription": "Allow CoolKidsApp to add events to your calendar"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": ["READ_CALENDAR", "WRITE_CALENDAR"],
+      "package": "com.example.calendarapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

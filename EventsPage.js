@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, FlatList, Image, TouchableOpacity, Linking, Alert } from 'react-native';
 import { IconButton } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
 import { ip } from './global.js';
 import styles from './components/Styles.js';
 import axios from "axios";
@@ -14,16 +15,18 @@ const EventsPage = ({navigation}) => {
         url: `http://${ip}:8080/api/v1/events`
     }
 
-    useEffect(() => {
-        const GetEvents = async () => {
-            await axios(config)
-                .then((response) => {
-                    setEventData(response.data.events);
-                })
-                .catch((e) => console.log(e));
-        }
-        GetEvents();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            const GetEvents = async () => {
+                await axios(config)
+                    .then((response) => {
+                        setEventData(response.data.events);
+                    })
+                    .catch((e) => console.log(e));
+            }
+            GetEvents();
+        }, [eventData])
+    )
 
     const RSVP = async (title) => {
         await axios.post('http://172.16.254.136:8080/api/test/addEvent', (

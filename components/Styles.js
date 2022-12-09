@@ -38,7 +38,9 @@ export default StyleSheet.create({
         height: deviceHieght,
         borderRadius: 30,
         backgroundColor: "#FFFFFF",
-        flex: 1
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1
     },
     calendar: {
         width: 85,
@@ -82,7 +84,6 @@ export default StyleSheet.create({
     inputText: {
         marginTop: StatusBar.currentHeight || 20,
         margin: 10,
-        flex: 1,
     },
     inputBox: {
         marginTop: StatusBar.currentHeight || 10,
@@ -91,7 +92,7 @@ export default StyleSheet.create({
         marginLeft: 10,
         borderWidth: 1,
         borderColor: "black",
-        flex: 1,
+        borderRadius: 10,
     },
     descBox: {
         marginTop: StatusBar.currentHeight || 10,
@@ -100,7 +101,7 @@ export default StyleSheet.create({
         marginLeft: 10,
         borderWidth: 1,
         borderColor: "black",
-        flex: 1,
+        borderRadius: 10,
     }, 
     EventButton: {
         margin: 10,
@@ -108,7 +109,6 @@ export default StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 10,
         backgroundColor:"#90ED65",
-        flex: 1,
     },
     buttonText: {
         fontSize: 18,
@@ -116,12 +116,10 @@ export default StyleSheet.create({
         fontWeight: "bold",
         alignSelf: "center",
         textTransform: "uppercase",
-        flex: 1,
     },
     RSVPButton: {
-        marginTop: 25,
-        marginLeft: 10,
-        marginRight: 10,
+        position: 'relative',
+        margin: 10,
         borderRadius: 10,
         backgroundColor:"#90ED65",
     },

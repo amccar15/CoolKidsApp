@@ -18,16 +18,26 @@ const HomePage = ({navigation}) => {
                 .then((response) => setUpcomingEvents(response.data.events))
                 .catch((e) => console.log(e));
         }
+        const getUser = async () => {
+            await axios.get(`http://${ip}:8080/api/test/user`)
+                        .then((response) => setUserInfo(response.data))
+                        .catch((e) => console.log(e));
+        }
         getUpcomingEvents();
+        getUser();
     }, [])
 
     const [UpcomingEvents, setUpcomingEvents] = useState([]);
+
+    const [userInfo, setUserInfo] = useState([]);
+
+    const upcoming = UpcomingEvents.slice(-3);
 
     return (
         <View>
             <View style={styles.UpperHome}>
                 <IconButton icon="bell" iconColor="#FFFFFF" style={styles.notifcationBell} onPress={() => navigation.navigate("NotificationTab")}></IconButton>
-                <IconButton icon="account" style={styles.userPhoto} onPress={() => navigation.navigate("Settings")}></IconButton>
+                <IconButton icon="account" style={styles.userPhoto}></IconButton>
                 <Text style={styles.UpperHomeText}>Home</Text>
             </View>
             <View style={styles.lowerHome}>
@@ -60,13 +70,13 @@ const HomePage = ({navigation}) => {
                 <Text style={{position: 'relative', alignSelf: 'flex-end', right: 75, top: 2}}>Events</Text>
                 <Text style={{position: 'relative', padding: 20, fontSize: 40, alignSelf: 'center', color: "#640D7A"}}>Upcoming</Text>
                 <FlatList
-                    contentContainerStyle={{height: 2000}}
-                    data={UpcomingEvents}
+                    contentContainerStyle={{height: "100%"}}
+                    data={upcoming}
                     renderItem={({ item }) => {return ( 
                         <View style={styles.upcomingEventIcon}>
                             <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.event_url})}>
-                                <Image source={{uri: item.eventPhotoUrl}} style={{height: "50%", width: "95%", marginBottom: 10, marginLeft: 10, position: 'relative'}}/>
-                                <Text style={{fontSize: 20, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventTitle}</Text>
+                                <Image source={{uri: item.eventPhotoUrl}} style={{height: "60%", width: "95%", marginBottom: 10, marginLeft: 10, position: 'relative', borderRadius: 5}}/>
+                                <Text style={{fontSize: 17, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventTitle}</Text>
                                 <Text style={{fontSize: 14, color: "black", marginLeft: 10, position: "relative"}} numberOfLines={1}>{item.eventDescription}</Text>
                             </TouchableOpacity>
                         </View>                        

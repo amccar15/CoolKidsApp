@@ -61,8 +61,10 @@ const Settings = ({navigation}) => {
             const result = await uploadBytes(fileRef, blob);
             blob.close();
 
-            setUpdateInfo({profilePhoto : getDownloadURL(fileRef)});
-            console.log(result);
+            getDownloadURL(fileRef).then((downloadURL) => {
+                console.log('File at: ', downloadURL);
+                setUserInfo({profilePhoto: downloadURL});
+            })
         } catch(error) {
             console.log(error);
         }
@@ -129,6 +131,7 @@ const Settings = ({navigation}) => {
                                     value={updateInfo.email}
                                     onChangeText = {value => setUpdateInfo(prevState => {return {...prevState, email: value}})}
                                     placeholder={userInfo.email}
+                                    placeholderTextColor={"white"}
                                 />      
                             </View>   
                             <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Change Phone Number:</Text>           
@@ -138,6 +141,7 @@ const Settings = ({navigation}) => {
                                     value={updateInfo.phoneNumber}
                                     onChangeText={value => setUpdateInfo(prevState => {return {...prevState, phoneNumber: value}})}
                                     placeholder={userInfo.phoneNumber}
+                                    placeholderTextColor={"white"}
                                 />    
                             </View>
                             <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Change Password?</Text>     

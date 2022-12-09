@@ -48,6 +48,8 @@ const Login = ({navigation}) => {
                         />
                         <TextInput 
                             style={styles.inputBox}
+                            secureTextEntry={true}
+                            autoCapitalize='none'
                             value={input.password}
                             onChangeText={value => setInput(prevState => {return {...prevState, password: value}})}
                             placeholder={"Enter Password"}
