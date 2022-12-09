@@ -19,8 +19,7 @@ const Login = ({navigation}) => {
             "password": input.password
         })
             .then((response) => {
-                navigation.navigate("LeftMenuNav", {username: response.data.username, role: response.data.roles});
-                console.log(response.data.roles[0]);
+                navigation.navigate("LeftMenuNav", {username: response.data.username, role: response.data.roles, password: input.password});
             })
             .catch((e) => {console.log(e); Alert.alert("Email or Password is incorrect")});
     }
@@ -37,7 +36,7 @@ const Login = ({navigation}) => {
                     <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
                 </View>
             <View style={styles.lowerHome}>
-                <ScrollView>
+                <ScrollView style={{borderTopLeftRadius: 30, borderTopRightRadius: 30}}>
                     <View>
                         <Text style={{color: "white", fontSize: 30, position: 'absolute', alignSelf: 'center', top: '5%'}}>Welcome Back!</Text>
                         <TextInput

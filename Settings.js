@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {Text, View, StyleSheet, ScrollView, TouchableOpacity, TextInput, LogBox, Image} from 'react-native';
+import {Text, View, StyleSheet, ScrollView, TouchableOpacity, TextInput, LogBox, Image, Alert, KeyboardAvoidingView} from 'react-native';
 import { IconButton } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import { storageBucket } from "./firebaseConfig.js";
@@ -10,8 +10,8 @@ import { ip } from './global.js';
 import styles from './components/Styles.js';
 import axios from "axios";
 
-const Settings = ({navigation}) => {
-
+const Settings = ({route, navigation}) => {
+    //get user information when screen is focused
     useFocusEffect(
         React.useCallback(() => {
             const getProfileInfo = async () => {
@@ -25,65 +25,99 @@ const Settings = ({navigation}) => {
         }, [userInfo])
     )
 
-    const[image, setImage] = useState(null);
+     //store image data in hook
+     const[image, setImage] = useState(null);
+     //get storage bucket from firebase
+     const storage = getStorage();
+     //let user pick photo from camera roll
+     const pickImage = async () => {
+         let result = await ImagePicker.launchImageLibraryAsync({
+             mediaTypes: ImagePicker.MediaTypeOptions.Images,
+             allowsEditing: true,
+             aspect: [4, 3],
+             quality: 0,
+         });
+         console.log(result);
+         LogBox.ignoreAllLogs();
+ 
+         if(result.assets != null) {
+             setImage(result.assets[0].uri);
+             uploadPhoto(result.assets[0].uri);
+         }
+     }
+     //upload the photo chosen in pickImage to firebase
+     const uploadPhoto = async (uri) => {
+         try {
+             const blob = await new Promise((resolve, rejcet) => {
+                 const data = new XMLHttpRequest();
+                 data.onload = function () {
+                     resolve(data.response);
+                 };
+                 data.onerror = function (e) {
+                     rejcet(new TypeError("Network request failure"));
+                 };
+                 data.responseType = 'blob';
+                 data.open("GET", uri, true);
+                 data.send(null);
+             });
+ 
+             const fileRef = ref(storage, uuid.v4());
+             const result = await uploadBytes(fileRef, blob);
+             blob.close();
+ 
+             getDownloadURL(fileRef).then((downloadURL) => {
+                 console.log('File at: ', downloadURL);
+                 setUpdateInfo((prevState => { return {...prevState, profilePhoto: downloadURL}}));
+                 Alert.alert("Photo uploaded!");
+             })
+         } catch(error) {
+             console.log(error);
+         }
+     }
 
-    const storage = getStorage();
-
-    const pickImage = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 0,
-        });
-        console.log(result);
-        LogBox.ignoreAllLogs();
-
-        if(result.assets != null) {
-            setImage(result.assets[0].uri);
-            uploadPhoto(result.assets[0].uri);
+    //validate users input
+    const verifyInput = () => {
+        if(updateInfo.oldPassword != route.params.usrPassword) {
+            Alert.alert("Old password is incorrect");
+        }
+        else if(updateInfo.newPassword != updateInfo.confimrPassword) {
+            Alert.alert("Passwords do not match");
+        }
+        else {
+            updateUser();
         }
     }
 
-    const uploadPhoto = async (uri) => {
-        try {
-            const blob = await new Promise((resolve, rejcet) => {
-                const data = new XMLHttpRequest();
-                data.onload = function () {
-                    resolve(data.response);
-                };
-                data.onerror = function (e) {
-                    rejcet(new TypeError("Network request failure"));
-                };
-                data.responseType = 'blob';
-                data.open("GET", uri, true);
-                data.send(null);
-            });
-
-            const fileRef = ref(storage, uuid.v4());
-            const result = await uploadBytes(fileRef, blob);
-            blob.close();
-
-            getDownloadURL(fileRef).then((downloadURL) => {
-                console.log('File at: ', downloadURL);
-                setUserInfo({profilePhoto: downloadURL});
-            })
-        } catch(error) {
-            console.log(error);
-        }
+    //update user information
+    const updateUser = async () => {
+        await axios.patch(`http://${ip}:8080/api/test/patchUser`, {
+            "firstName": updateInfo.firstName,
+            "lastName": updateInfo.lastName,
+            "password": updateInfo.confimrPassword,
+            "birthdate": updateInfo.birthdate,
+            "address": updateInfo.address,
+            "phoneNumber": updateInfo.phoneNumber,
+            "profilePic": updateInfo.profilePhoto,
+        }).then((response) => {
+            console.log(response.data);
+        }).catch((e) => console.trace(e));
     }
 
+    //store user info in hook
     const [userInfo, setUserInfo] = useState([]);
-
+    //store all update fields
     const [updateInfo, setUpdateInfo] = useState({
         profilePhoto: "",
-        email: "",
         phoneNumber: "",
+        firstName: "",
+        lastName: "",
+        address: "",
+        birthdate: "",
         oldPassword: "",
         newPassword: "",
         confimrPassword: ""
     })
-
+    //if set true shows the edit fields if false just shows user info
     const [showUpdate, setShow] = useState(false);
 
     return(
@@ -105,7 +139,7 @@ const Settings = ({navigation}) => {
                 <Text style={styles.UpperHomeText}>Profile</Text>
             </View>
             <View style={styles.lowerHome}>
-                <View style={{position: 'relative', display: 'flex', flexDirection: 'column', flexGrow: 1}}>
+                <View style={{flex: 1, marginBottom: 200, paddingBottom: 100}}>
                     <ScrollView>
                         {showUpdate === false &&  (
                             <View>
@@ -119,24 +153,34 @@ const Settings = ({navigation}) => {
                                     <Text style={{position: 'relative', textAlign: 'center', padding: 5, fontSize: 20, fontFamily:"Baskerville-SemiBold", color: 'white', }}>{userInfo.phoneNumber}</Text>
                                 </View>
 
+
+                                <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Current Name:</Text>
+                                <View style={{backgroundColor: '#041598', margin: 10, borderRadius: 10}}>
+                                    <Text style={{position: 'relative', textAlign: 'center', padding: 5, fontSize: 20, fontFamily:"Baskerville-SemiBold", color: 'white', }}>{userInfo.firstName} {userInfo.lastName} </Text>
+                                </View>
+
+                                <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Current Address:</Text>
+                                <View style={{backgroundColor: '#041598', margin: 10, borderRadius: 10}}>
+                                    <Text style={{position: 'relative', textAlign: 'center', padding: 5, fontSize: 20, fontFamily:"Baskerville-SemiBold", color: 'white', }}>{userInfo.address}</Text>
+                                </View>
+
+                                <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Current Birthday:</Text>
+                                <View style={{backgroundColor: '#041598', margin: 10, borderRadius: 10}}>
+                                    <Text style={{position: 'relative', textAlign: 'center', padding: 5, fontSize: 20, fontFamily:"Baskerville-SemiBold", color: 'white', }}>{userInfo.birthdate}</Text>
+                                </View>
+
                                 <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Change Password?</Text>
                                 <TouchableOpacity style={styles.EventButton} onPress={() => setShow(true)}>
                                     <Text style={styles.buttonText}>Change Information</Text>
                                 </TouchableOpacity>
-                            </View>
+                        </View>
                         )}
                         {showUpdate === true && (
-                        <View>
-                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Change Email:</Text>
-                            <View style={{alignSelf: 'flex-start'}}>
-                                <TextInput
-                                    style={settingStyle.inputBox}
-                                    value={updateInfo.email}
-                                    onChangeText = {value => setUpdateInfo(prevState => {return {...prevState, email: value}})}
-                                    placeholder={userInfo.email}
-                                    placeholderTextColor={"white"}
-                                />      
-                            </View>   
+                        <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Current Email:</Text>
+                            <View style={{backgroundColor: '#041598', margin: 10, borderRadius: 10}}>
+                                    <Text style={{position: 'relative', textAlign: 'center', padding: 5, fontSize: 20, fontFamily:"Baskerville-SemiBold", color: 'white'}}>{userInfo.email}</Text>
+                            </View>  
                             <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Change Phone Number:</Text>           
                             <View style={{alignSelf: 'flex-start'}}>    
                                 <TextInput 
@@ -145,6 +189,46 @@ const Settings = ({navigation}) => {
                                     onChangeText={value => setUpdateInfo(prevState => {return {...prevState, phoneNumber: value}})}
                                     placeholder={userInfo.phoneNumber}
                                     placeholderTextColor={"white"}
+                                />    
+                            </View>
+                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Change First Name:</Text>           
+                            <View style={{alignSelf: 'flex-start'}}>    
+                                <TextInput 
+                                    style={settingStyle.inputBox}
+                                    value={updateInfo.firstName}
+                                    onChangeText={value => setUpdateInfo(prevState => {return {...prevState, firstName: value}})}
+                                    placeholder={userInfo.firstName}
+                                placeholderTextColor={"white"}
+                                />    
+                            </View>
+                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Change Last Name:</Text>           
+                            <View style={{alignSelf: 'flex-start'}}>    
+                                <TextInput 
+                                    style={settingStyle.inputBox}
+                                    value={updateInfo.lastName}
+                                    onChangeText={value => setUpdateInfo(prevState => {return {...prevState, lastName: value}})}
+                                    placeholder={userInfo.lastName}
+                                placeholderTextColor={"white"}
+                                />    
+                            </View>
+                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Change Address:</Text>           
+                            <View style={{alignSelf: 'flex-start'}}>    
+                                <TextInput 
+                                    style={settingStyle.inputBox}
+                                    value={updateInfo.address}
+                                    onChangeText={value => setUpdateInfo(prevState => {return {...prevState, address: value}})}
+                                    placeholder={userInfo.address}
+                                placeholderTextColor={"white"}
+                                />    
+                            </View>
+                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Change Birthday:</Text>           
+                            <View style={{alignSelf: 'flex-start'}}>    
+                                <TextInput 
+                                    style={settingStyle.inputBox}
+                                    value={updateInfo.birthdate}
+                                    onChangeText={value => setUpdateInfo(prevState => {return {...prevState, birthdate: value}})}
+                                    placeholder={userInfo.birthdate}
+                                placeholderTextColor={"white"}
                                 />    
                             </View>
                             <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Change Password?</Text>     
@@ -177,10 +261,10 @@ const Settings = ({navigation}) => {
                                     placeholderTextColor={"white"}
                                 />
                             </View>
-                            <TouchableOpacity style={styles.EventButton} onPress={() => setShow(false)}>
+                            <TouchableOpacity style={styles.EventButton} onPress={() => {setShow(false); verifyInput();}}>
                                 <Text style={styles.buttonText}>Update Account</Text>
                             </TouchableOpacity>
-                        </View>
+                        </KeyboardAvoidingView>
                         )}  
                         <Text style={{position: 'relative', fontSize: 40, alignSelf: 'center', color: "#640D7A"}}>My Events</Text>              
                     </ScrollView>

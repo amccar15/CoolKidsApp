@@ -6,9 +6,11 @@ import { ip } from './global.js';
 import styles from './components/Styles.js';
 import axios from "axios";
 
-const EventsPage = ({navigation}) => {
+const EventsPage = ({route, navigation}) => {
 
     const [eventData, setEventData] = useState([]);
+
+    const [userInfo, setUserInfo] = useState([]);
 
     const config = {
         method: 'get',
@@ -24,7 +26,13 @@ const EventsPage = ({navigation}) => {
                     })
                     .catch((e) => console.log(e));
             }
+            const getUser = async () => {
+                await axios.get(`http://${ip}:8080/api/test/user`)
+                            .then((response) => setUserInfo(response.data))
+                            .catch((e) => console.log(e));
+            }
             GetEvents();
+            getUser();
         }, [eventData])
     )
 
@@ -55,17 +63,22 @@ const EventsPage = ({navigation}) => {
         <View>
             <View style={styles.UpperHome}>
                 <IconButton icon="bell" iconColor="#FFFFFF" style={styles.notifcationBell} onPress={() => navigation.navigate("NotificationTab")}></IconButton>
-                <IconButton icon="account" style={styles.userPhoto}></IconButton>
+                {userInfo.profilePic === null || userInfo.profilePic === "" && (
+                        <IconButton icon="account" style={styles.userPhoto}></IconButton>
+                    )}
+                {userInfo.profilePic != null &&(
+                        <Image source={{uri: userInfo.profilePic}} style={{width: 70, height: 70, borderRadius: 20, alignSelf: 'center'}} />
+                )}
                 <Text style={styles.UpperHomeText}>Events</Text>
             </View>
             <View style={styles.lowerHome}>
                 <View style={styles.eventContainer}>
                     <FlatList
-                        style={{height: "100%", width: '100%', display: "flex", flexDirection: 'column', flex: 1}}
+                        style={{height: "100%", width: '100%', display: "flex", flexDirection: 'column', flex: 1, borderTopLeftRadius: 30, borderTopRightRadius: 30}}
                         data={eventData}
                         renderItem={({ item }) => {return ( 
                             <View style={styles.eventDisplay}>
-                                <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.event_url})}>
+                                <TouchableOpacity onPress={() => navigation.navigate("TheEvent", {eventID: item.event_url, role: route.params.accountRole})}>
                                     <Image source={{uri: item.eventPhotoUrl}} style={{height: "50%", width: "95%", margin: 10, position: 'relative'}}/>
 
                                     <Text style={{fontSize: 19, color: "black", marginLeft: 10, position: "relative", justifyContent: "space-between"}}>{item.eventTitle}</Text>

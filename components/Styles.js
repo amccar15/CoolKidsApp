@@ -134,5 +134,6 @@ export default StyleSheet.create({
         height: 300,
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
+        position: 'relative'
     }
 })

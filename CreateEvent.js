@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, TextInput, ScrollView, TouchableOpacity, Image, LogBox} from 'react-native';
+import { Text, View, TextInput, ScrollView, TouchableOpacity, Image, LogBox, Alert} from 'react-native';
 import { IconButton } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import { storageBucket } from "./firebaseConfig.js";
@@ -25,7 +25,7 @@ const CreateEvent = ({ navigation }) => {
     //user information hook
     const [userInfo, setUserInfo] = useState([]);
 
-    //creating hooks for image picker
+    //creating hooks for date picker
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
     const [mode, setMode] = useState('date');
@@ -89,7 +89,8 @@ const CreateEvent = ({ navigation }) => {
 
             getDownloadURL(fileRef).then((downloadURL) => {
                 console.log('File at: ', downloadURL);
-                setInput({photoUrl: downloadURL});
+                setInput(prevState => {return {...prevState, photoUrl: downloadURL}});
+                Alert.alert("Photo uploaded!");
             })
         } catch(error) {
             console.log(error);
@@ -147,12 +148,17 @@ const CreateEvent = ({ navigation }) => {
         <View>
             <View style={styles.UpperHome}>
                 <IconButton icon="bell" iconColor="#FFFFFF" style={styles.notifcationBell} onPress={() => navigation.navigate("NotificationTab")}></IconButton>
-                <IconButton icon="account" style={styles.userPhoto}></IconButton>
+                {userInfo.profilePic === null || userInfo.profilePic === "" && (
+                        <IconButton icon="account" style={styles.userPhoto}></IconButton>
+                    )}
+                {userInfo.profilePic != null &&(
+                        <Image source={{uri: userInfo.profilePic}} style={{width: 70, height: 70, borderRadius: 20, alignSelf: 'center'}} />
+                )}
                 <Text style={styles.UpperHomeText}>Create Event</Text>
             </View>
             <View style={styles.lowerHome}>
                 <View style={{flex: 1, marginBottom: 200, paddingBottom: 100}}>
-                    <ScrollView>
+                    <ScrollView style={{borderTopLeftRadius: 30, borderTopRightRadius: 30}}>
                             {input.photoUrl !== "" && (
                                 <Image source={{uri: input.photoUrl}} style={{resizeMode: 'cover', width: 300, height: 300, alignSelf: 'center', borderRadius: 20, marginTop: 10}} />
                             )}

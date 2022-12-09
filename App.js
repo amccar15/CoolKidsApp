@@ -10,6 +10,7 @@ import eventsPage from './EventsPage.js';
 import NotificationTab from './NotificationsTab.js';
 import Settings from './Settings.js'
 import TheEvent from './TheEvent.js';
+import EditEvent from './editEvent.js';
 import CreateEvent from './CreateEvent.js';
 import { IconButton } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -18,8 +19,6 @@ import axios from 'axios';
 const Stack = createNativeStackNavigator();
 
 const Drawer = createDrawerNavigator();
-
-const RightDrawer = createDrawerNavigator();
 
 const signOutUser = async (usr) => {
   await axios.post(`http://${ip}:8080/api/auth/signout`, {username: usr}).then((response) => console.log(response.data))
@@ -65,16 +64,19 @@ const LeftMenuNav = ({route}) => {
         options={
           {title: "Home", drawerIcon: ({color}) => (<IconButton icon="home" iconColor={color}/>)}
         }
+        initialParams={{accountRole: ROLE}}
       />
       <Drawer.Screen name='Events' component={eventsPage} 
         options={
           {title: "Events", drawerIcon: ({color}) => (<IconButton icon="account-group" iconColor={color}/>)}
         }
+        initialParams={{accountRole: ROLE}}
       />
       <Drawer.Screen name='Settings' component={Settings} 
         options={
           {title: "Profile", drawerIcon: ({color}) => (<IconButton icon="account" iconColor={color}/>)}
         } 
+        initialParams={{usrPassword: route.params.password}}
       />
       {ROLE == "ADMIN" &&
         <Drawer.Screen name='CreateEvent' component={CreateEvent} 
@@ -85,17 +87,6 @@ const LeftMenuNav = ({route}) => {
       }
     </Drawer.Navigator>
   );
-}
-
-const RightMenu = ({route}) => {
-  <RightDrawer.Navigator
-    screenOptions={{
-      drawerPosition: 'right',
-      headerShown: false,
-    }}
-  >
-    <RightDrawer.Screen name='HomeDrawer' component={LeftMenuNav}/>
-  </RightDrawer.Navigator>
 }
 
 const App = () => {
@@ -116,7 +107,7 @@ const App = () => {
             name='LeftMenuNav'
             component={LeftMenuNav}
             options={{ headerShown: false}}
-            initialParams={{username: "", role: ""}}
+            initialParams={{username: "", role: "", password: ""}}
           />
           <Stack.Screen 
             name='NotificationTab'
@@ -126,6 +117,11 @@ const App = () => {
           <Stack.Screen
             name='TheEvent' 
             component={TheEvent} 
+            initialParams={{eventID: ""}}
+          />
+          <Stack.Screen
+            name='EditEvent'
+            component={EditEvent}
             initialParams={{eventID: ""}}
           />
         </Stack.Navigator>

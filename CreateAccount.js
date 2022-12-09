@@ -89,7 +89,7 @@ const CreateAccount = ({navigation}) => {
                     <Image source={require('./CoolKidsLogo.png')} style={styles.image}/>
                 </View>
                 <View style={styles.lowerHome}>
-                    <ScrollView>
+                    <ScrollView style={{borderTopLeftRadius: 30, borderTopRightRadius: 30}}>
                         <View style={{height: 1200}}>
                             <Text style={{color: "white", fontSize: 30, position: 'relative', alignSelf: 'center', marginTop: 10}}>Create Account</Text>
                             <TextInput
