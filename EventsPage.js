@@ -61,7 +61,7 @@ const EventsPage = ({navigation}) => {
             <View style={styles.lowerHome}>
                 <View style={styles.eventContainer}>
                     <FlatList
-                        style={{height: "100%", display: "flex", flexDirection: 'column'}}
+                        style={{height: "100%", width: '100%', display: "flex", flexDirection: 'column', flex: 1}}
                         data={eventData}
                         renderItem={({ item }) => {return ( 
                             <View style={styles.eventDisplay}>
@@ -82,7 +82,7 @@ const EventsPage = ({navigation}) => {
                                         borderRadius: 10, 
                                         height: 30, 
                                         width: 75,
-                                        top: -6 
+                                        top: -6.5, 
                                         }}
                                         onPress={() => openNavigationApp(item.eventAddress)}
                                     ></IconButton>

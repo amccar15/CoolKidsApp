@@ -5,22 +5,25 @@ import * as ImagePicker from 'expo-image-picker';
 import { storageBucket } from "./firebaseConfig.js";
 import { ref, getDownloadURL, uploadBytes, getStorage } from "firebase/storage";
 import uuid from "uuid";
+import { useFocusEffect } from "@react-navigation/native";
 import { ip } from './global.js';
 import styles from './components/Styles.js';
 import axios from "axios";
 
 const Settings = ({navigation}) => {
 
-    useEffect(() => {
-        const getProfileInfo = async () => {
-            axios.get(`http://${ip}:8080/api/test/user`)
-                        .then((response) => {
-                            setUserInfo(response.data)
-                        })
-                        .catch((e) => console.log(e));
-        }
-        getProfileInfo();
-    }, []);
+    useFocusEffect(
+        React.useCallback(() => {
+            const getProfileInfo = async () => {
+                await axios.get(`http://${ip}:8080/api/test/user`)
+                            .then((response) => {
+                                setUserInfo(response.data)
+                            })
+                            .catch((e) => console.log(e));
+            }
+            getProfileInfo();
+        }, [userInfo])
+    )
 
     const[image, setImage] = useState(null);
 

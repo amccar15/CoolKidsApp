@@ -65,7 +65,7 @@ const TheEvent = ({route, navigation}) => {
                 //endDate: currentEvent.eventEndDateTime,
                 //title: currentEvent.eventTitle
         });
-        Calendar.openEventInCalendar(newCalenderId);
+        Calendar.openEventInCalendar(eventId);
         } catch (e) {
             console.log(e);
         }

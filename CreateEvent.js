@@ -151,103 +151,103 @@ const CreateEvent = ({ navigation }) => {
                 <Text style={styles.UpperHomeText}>Create Event</Text>
             </View>
             <View style={styles.lowerHome}>
-                <ScrollView>
-                <View style={{flex: 1, height: 1400}}>
-                        {input.photoUrl !== "" && (
-                            <Image source={{uri: input.photoUrl}} style={{resizeMode: 'cover', width: 300, height: 300, alignSelf: 'center', borderRadius: 20, marginTop: 10}} />
-                        )}
-                        <TouchableOpacity style={styles.EventButton} onPress={() => pickImage()}>
-                            <Text style={styles.buttonText}>Add a Cover Photo!</Text>
-                        </TouchableOpacity>
-                        <View style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
-                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 10, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Title:</Text>
-                            <TextInput 
-                                style={styles.inputBox}
-                                value={input.title}
-                                onChangeText={(value) => setInput(prevState => {return{...prevState, title: value}})}
-                                placeholder={"Enter Event Title"}
-                            />
-                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Description:</Text>
-                            <TextInput 
-                                style={styles.descBox}
-                                multiline={true}
-                                textAlignVertical="top"
-                                value={input.description}
-                                onChangeText={(value) => setInput(prevState => {return{...prevState, description: value}})}
-                                placeholder={"Enter Event Description"}
-                            />
-                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 10, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Address:</Text>
-                            <TextInput 
-                                style={styles.inputBox}
-                                value={input.location}
-                                onChangeText={(value) => setInput(prevState => {return{...prevState, location: value}})}
-                                placeholder={"Enter Event Address"}
-                            />
-                            <View style={{display: 'flex', flexDirection: 'row'}}>
-                                <Text style={{position: 'relative', marginLeft: 10, marginTop: 10, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Capacity:</Text>
+                <View style={{flex: 1, marginBottom: 200, paddingBottom: 100}}>
+                    <ScrollView>
+                            {input.photoUrl !== "" && (
+                                <Image source={{uri: input.photoUrl}} style={{resizeMode: 'cover', width: 300, height: 300, alignSelf: 'center', borderRadius: 20, marginTop: 10}} />
+                            )}
+                            <TouchableOpacity style={styles.EventButton} onPress={() => pickImage()}>
+                                <Text style={styles.buttonText}>Add a Cover Photo!</Text>
+                            </TouchableOpacity>
+                            <View style={{display: 'flex', flexDirection: 'column', position: 'relative'}}>
+                                <Text style={{position: 'relative', marginLeft: 10, marginTop: 10, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Title:</Text>
                                 <TextInput 
-                                    style={{height: 30, width: 80, margin: 10, borderWidth: 1, borderColor: "black", borderRadius: 10,}}
-                                    value={input.capacity}
-                                    onChangeText={(value) => setInput(prevState => {return{...prevState, capacity: value}})}
-                                    placeholder={"Capacity"}
+                                    style={styles.inputBox}
+                                    value={input.title}
+                                    onChangeText={(value) => setInput(prevState => {return{...prevState, title: value}})}
+                                    placeholder={"Enter Event Title"}
                                 />
+                                <Text style={{position: 'relative', marginLeft: 10, marginTop: 20, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Description:</Text>
+                                <TextInput 
+                                    style={styles.descBox}
+                                    multiline={true}
+                                    textAlignVertical="top"
+                                    value={input.description}
+                                    onChangeText={(value) => setInput(prevState => {return{...prevState, description: value}})}
+                                    placeholder={"Enter Event Description"}
+                                />
+                                <Text style={{position: 'relative', marginLeft: 10, marginTop: 10, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Address:</Text>
+                                <TextInput 
+                                    style={styles.inputBox}
+                                    value={input.location}
+                                    onChangeText={(value) => setInput(prevState => {return{...prevState, location: value}})}
+                                    placeholder={"Enter Event Address"}
+                                />
+                                <View style={{display: 'flex', flexDirection: 'row'}}>
+                                    <Text style={{position: 'relative', marginLeft: 10, marginTop: 10, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Capacity:</Text>
+                                    <TextInput 
+                                        style={{height: 30, width: 80, margin: 10, borderWidth: 1, borderColor: "black", borderRadius: 10,}}
+                                        value={input.capacity}
+                                        onChangeText={(value) => setInput(prevState => {return{...prevState, capacity: value}})}
+                                        placeholder={"Capacity"}
+                                    />
+                                </View>
+                                <Text style={{position: 'relative', marginLeft: 10, marginTop: 10, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Time:</Text>
+                                <View style={{display: "flex", flexDirection: "row", position: 'relative', backgroundColor: '#90ED65', margin: 10, borderRadius: 10}}>
+                                    <View style={{display: 'flex', flexDirection: 'column'}}>
+                                        <TouchableOpacity onPress={() => {setShowStart(true); setMode('date');}} title="Event Date" style={{position: "relative", padding: 10, marginLeft: 10}}>
+                                            <Text>Set Start Date</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {setShowStart(true); setMode('time');}} title="Event Date" style={{position: "relative", padding: 10, marginLeft: 10}}>
+                                            <Text>Set Start Time</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{position: 'relative', marginLeft: 10, padding: 10, width: "50%"}}>
+                                        {showStart === true && (<RNDateTimePicker
+                                            style={{height: 50, width: "65%"}}
+                                            value={startDate}
+                                            mode={mode}
+                                            is24Hour={true}
+                                            display='default'
+                                            onChange={(event, selectedDate) => onChangeStart(selectedDate)}
+                                        />)}
+                                    </View>
+                                    <View style={{position: 'absolute', marginLeft: 150, padding: 10, width: "60%"}}>
+                                    {showStart === false && (
+                                        <Text style={{fontFamily:"ArialRoundedMTBold"}}>Time Selected: {String(startDate.toLocaleString())}</Text>
+                                    )}
+                                    </View>
+                                </View>
+                                <Text style={{position: 'relative', marginLeft: 130, fontSize: 20, fontFamily: 'ArialRoundedMTBold'}}>To: </Text>
+                                <View style={{display: "flex", flexDirection: "row", position: 'relative', backgroundColor: '#90ED65', margin: 10, borderRadius: 10}}>
+                                    <View style={{display: 'flex', flexDirection: 'column'}}>
+                                        <TouchableOpacity onPress={() => {setShowEnd(true); setMode('date');}} title="Event Date" style={{position: "relative", padding: 10, marginLeft: 10}}>
+                                            <Text>Set End Date</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => {setShowEnd(true); setMode('time');}} title="Event Date" style={{position: "relative", padding: 10, marginLeft: 10}}>
+                                            <Text>Set End Time</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{position: 'relative', marginLeft: 10, padding: 10, width: "50%"}}>
+                                        {showEnd === true && (<RNDateTimePicker
+                                            style={{height: 50, width: "65%"}}
+                                            value={endDate}
+                                            mode={mode}
+                                            is24Hour={true}
+                                            display='default'
+                                            onChange={(event, selectedDate) => onChangeEnd(selectedDate)}
+                                        />)}
+                                    </View>
+                                    <View style={{position: 'absolute', marginLeft: 150, padding: 10, width: "60%"}}>
+                                    {showEnd === false && (
+                                        <Text style={{fontFamily:"ArialRoundedMTBold"}}>Time Selected: {String(endDate.toLocaleString())}</Text>
+                                    )}
+                                    </View>
+                                </View>
+                                <TheEventButton title={"Create Event"} size="lg" />
                             </View>
-                            <Text style={{position: 'relative', marginLeft: 10, marginTop: 10, fontSize: 20, fontFamily:"ArialRoundedMTBold"}}>Event Time:</Text>
-                            <View style={{display: "flex", flexDirection: "row", position: 'relative', backgroundColor: '#90ED65', margin: 10, borderRadius: 10}}>
-                                <View style={{display: 'flex', flexDirection: 'column'}}>
-                                    <TouchableOpacity onPress={() => {setShowStart(true); setMode('date');}} title="Event Date" style={{position: "relative", padding: 10, marginLeft: 10}}>
-                                        <Text>Set Start Date</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {setShowStart(true); setMode('time');}} title="Event Date" style={{position: "relative", padding: 10, marginLeft: 10}}>
-                                        <Text>Set Start Time</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={{position: 'relative', marginLeft: 10, padding: 10, width: "50%"}}>
-                                    {showStart === true && (<RNDateTimePicker
-                                        style={{height: 50, width: "65%"}}
-                                        value={startDate}
-                                        mode={mode}
-                                        is24Hour={true}
-                                        display='default'
-                                        onChange={(event, selectedDate) => onChangeStart(selectedDate)}
-                                    />)}
-                                </View>
-                                <View style={{position: 'absolute', marginLeft: 150, padding: 10, width: "60%"}}>
-                                {showStart === false && (
-                                    <Text style={{fontFamily:"ArialRoundedMTBold"}}>Time Selected: {String(startDate.toLocaleString())}</Text>
-                                )}
-                                </View>
-                            </View>
-                            <Text style={{position: 'relative', marginLeft: 130, fontSize: 20, fontFamily: 'ArialRoundedMTBold'}}>To: </Text>
-                            <View style={{display: "flex", flexDirection: "row", position: 'relative', backgroundColor: '#90ED65', margin: 10, borderRadius: 10}}>
-                                <View style={{display: 'flex', flexDirection: 'column'}}>
-                                    <TouchableOpacity onPress={() => {setShowEnd(true); setMode('date');}} title="Event Date" style={{position: "relative", padding: 10, marginLeft: 10}}>
-                                        <Text>Set End Date</Text>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {setShowEnd(true); setMode('time');}} title="Event Date" style={{position: "relative", padding: 10, marginLeft: 10}}>
-                                        <Text>Set End Time</Text>
-                                    </TouchableOpacity>
-                                </View>
-                                <View style={{position: 'relative', marginLeft: 10, padding: 10, width: "50%"}}>
-                                    {showEnd === true && (<RNDateTimePicker
-                                        style={{height: 50, width: "65%"}}
-                                        value={endDate}
-                                        mode={mode}
-                                        is24Hour={true}
-                                        display='default'
-                                        onChange={(event, selectedDate) => onChangeEnd(selectedDate)}
-                                    />)}
-                                </View>
-                                <View style={{position: 'absolute', marginLeft: 150, padding: 10, width: "60%"}}>
-                                {showEnd === false && (
-                                    <Text style={{fontFamily:"ArialRoundedMTBold"}}>Time Selected: {String(endDate.toLocaleString())}</Text>
-                                )}
-                                </View>
-                            </View>
-                            <TheEventButton title={"Create Event"} size="lg" />
-                        </View>
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                </View>
             </View>
         </View>
     );

@@ -38,9 +38,6 @@ export default StyleSheet.create({
         height: deviceHieght,
         borderRadius: 30,
         backgroundColor: "#FFFFFF",
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1
     },
     calendar: {
         width: 85,
@@ -68,8 +65,9 @@ export default StyleSheet.create({
         backgroundColor: '#90ED65'
     },
     eventContainer: {
-        marginTop: StatusBar.currentHeight || 0,
-        
+        flex: 1,
+        marginBottom: 100,
+        paddingBottom: 175
     },
     eventDisplay: {
         width: deviceWidth - 10,
