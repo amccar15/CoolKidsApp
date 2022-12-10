@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, TextInput, ScrollView, TouchableOpacity, Image, LogBox, Alert} from 'react-native';
 import { IconButton } from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
@@ -124,18 +124,24 @@ const CreateEvent = ({ navigation }) => {
         let formatStartDate = startDate.toLocaleString();
         let formatEndDate = endDate.toLocaleString();
         await axios.post(
-            `http://${ip}:8080/api/v1/events`,
+            `http://${ip}:8080/api/v1/events/create`,
             {
+                "id": 18,
                 "eventStartDateTime": formatStartDate,
                 "eventEndDateTime": formatEndDate,
+                "eventCreatedDate": null,
+                "eventUpdatedDate": null,
+                "eventType": null,
                 "maxAttendance": input.capacity,
+                "currentRSVPS": null,
                 "eventTitle": input.title,
                 "eventDescription": input.description,
                 "eventAddress": input.location,
                 "eventPhotoUrl": input.photoUrl,
                 "contactPersonName": userInfo.firstName + " " + userInfo.lastName,
                 "contactPersonPhoneNumber": userInfo.phoneNumber,
-                "contactPersonEmail": userInfo.email
+                "contactPersonEmail": userInfo.email,
+                "event_url": null,
             })
             .then((response) => {
                 console.log(response.data);

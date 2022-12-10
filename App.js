@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
@@ -24,6 +24,7 @@ const signOutUser = async (usr) => {
   await axios.post(`http://${ip}:8080/api/auth/signout`, {username: usr}).then((response) => console.log(response.data))
     .catch((e) => console.log(e));
 }
+
 
 function CustomDrawerContent(props) {
   return (

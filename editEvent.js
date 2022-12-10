@@ -126,11 +126,7 @@ const EditEvent = ({route, navigation}) => {
     }
      
     const verifyInput = () => {
-        if(!updateEventInfo.photoUrl) {
-            console.log("Photo is empty")
-        } else {
-            updateEvent();
-        }
+        updateEvent();
     }
 
     //update event data

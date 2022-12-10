@@ -100,6 +100,7 @@ const Settings = ({route, navigation}) => {
             "profilePic": updateInfo.profilePhoto,
         }).then((response) => {
             console.log(response.data);
+            getProfileInfo();
         }).catch((e) => console.trace(e));
     }
 
@@ -265,8 +266,7 @@ const Settings = ({route, navigation}) => {
                                 <Text style={styles.buttonText}>Update Account</Text>
                             </TouchableOpacity>
                         </KeyboardAvoidingView>
-                        )}  
-                        <Text style={{position: 'relative', fontSize: 40, alignSelf: 'center', color: "#640D7A"}}>My Events</Text>              
+                        )}                
                     </ScrollView>
                 </View>
             </View>
